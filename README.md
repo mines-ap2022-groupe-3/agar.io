@@ -286,4 +286,33 @@ nous pouvons déplacer le blop dans cette direction en "ajoutant" ce vecteur à 
 
 ## Un `blop` qui suit la souris
 
-A chaque itération on récupère la position du curseur de la souris
+A chaque itération on récupère la position du curseur de la souris avec `pg.mouse.get_pos()`
+
+### Version simple -> le blop est au meme endroit que la souris
+
+On modifie la position du blop en fonction de la position de la souris
+
+### Version complexe -> le blop se dirige **vers la souris**
+
+On peut par exemple utiliser les vecteurs de pygame.
+
+*Indice* Chercher `Vector2.normalize` sur la doc pygame
+
+
+## Les fruits
+
+Il faut maintenant faire manger notre `blop`. On va procéder comme suit :
+
+* on a toujours la position du serpent dans une variable :
+* on génère un "fruit", dans une position aléatoire
+ 
+```python
+# exemple de fruit en position 10, 10 sur le plateau
+fruit = (10, 10)
+```
+
+* on affiche le fruits (un cercle rouge de rayon 10px par example)
+quand la position du `blop` est *proche* du fruit alors 
+  * le fruit disparait 
+  * au autre fruit disparait ailleurs
+  * (optionnel) le blop grossit)
