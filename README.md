@@ -6,6 +6,37 @@ L'objectif est de vous apprendre à concevoir et réaliser un programme complet,
 
 Gardez ainsi en tête que votre objectif est de réaliser un **programme qui marche** et pas un programme parfait.
 
+**avertissement** ce document n'est pas un notebook (et le code ne va pas
+marcher dans un notebook non plus); on peut le lire avec jupyter mais c'est
+sous-optimal, le mieux est le lire avec vs-code, ou en HTML statique.
+
+## Objectifs et démarche
+
+Gardez en tête que votre objectif est de réaliser un **programme qui marche** et
+pas un programme parfait.  
+Aussi on va commencer par se créer un dossier vierge, et l'initialiser **comme un
+dépôt `git`** (on fait comment déjà ?)
+
+```bash
+$ mkdir agario
+$ cd agario
+$ # et là on crée un dépôt git avec ??
+```
+
+Et ensuite, on va bien faire attention de **committer chaque fois** qu'on aura
+**une version qui marche**  
+c'est-à-dire dans ce TP très guidé, **un commit par
+étape** en gros !
+
+Et comme ça quand on aura un bug on pourra se concentrer sur **ce qui a changé**
+depuis la version qui marchait
+
+Enfin si vous créez votre dépôt à l'intérieur d'un autre dépôt (de cours par
+exemple), reportez-vous à la toute dernière section pour comprendre comment `ca
+fonctionne.
+
+Mais avant de pouvoir commencer, un peu de préparation...
+
 ## Prérequis
 
 _Ce qui suit suppose que vous avez installé Python avec `conda` et que vous avez un terminal `bash` fonctionnel sur votre ordinateur._
@@ -96,7 +127,6 @@ if __name__ == "__main__":
 Vous pouvez désormais exécuter le programme avec:
 
 ```sh
-%%sh
 (agario) $ python agario.py
 ```
 
@@ -205,3 +235,10 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+## Le plateau de jeu
+
+Nous allons commencer par construire notre plateau de jeu ainsi:
+
+- le plateau de jeu est découpé en 64x64 cases
+- chaque case fait 10 pixels de côté
