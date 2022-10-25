@@ -240,5 +240,50 @@ if __name__ == "__main__":
 
 Nous allons commencer par construire notre plateau de jeu ainsi:
 
-- le plateau de jeu est découpé en 64x64 cases
-- chaque case fait 10 pixels de côté
+- le plateau de jeu est découpé en 16x16 cases
+- chaque case fait 40 pixels de côté
+
+Pour valider le bon fonctionnement de ce plateau de jeu, écrivez un programme
+qui dessine un grille (vous pouvez ben sûr choisir d'autres couleurs):
+
+![](media/damier.png)
+
+pour cela, vous pouvez utiliser la méthode
+[`pg.draw.line()`](https://www.pygame.org/docs/ref/draw.html#pygame.draw.line)
+qui dessine une ligne :
+
+```python
+# les coordonnées de rectangle que l'on dessine
+x1 = 100 # coordonnée x1 (colonnes) en pixels
+y1 = 100 # coordonnée y1 (lignes) en pixels
+x2 = 400 # coordonnée x2 (colonnes) en pixels
+y2 = 200 # coordonnée y2 (lignes) en pixels
+
+# appel à la méthode draw.line()
+color = (255, 0, 0) # couleur rouge
+pg.draw.line(screen, color, (x1, y1), (x2, y2))
+```
+
+une fois que ça marche, vous faites quoi ?
+
+## Un `blop`
+
+L'étape suivante est de dessiner le `blop`. 
+Pour cela nous utiliserons https://www.pygame.org/docs/ref/draw.html#pygame.draw.circle
+
+Nous allons créer un cercle de rayon 80 pixels au centre de l'écran.
+
+## Un `blop` qui bouche
+
+Nous créons un vecteur de "direction"
+
+```python
+direction = (1, 0)
+```
+
+à chaque itération de la boucle, 
+nous pouvons déplacer le blop dans cette direction en "ajoutant" ce vecteur à la position du blop.
+
+## Un `blop` qui suit la souris
+
+A chaque itération on récupère la position du curseur de la souris
