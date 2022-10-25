@@ -136,7 +136,7 @@ Vous pouvez désormais exécuter le programme avec:
 vs-code pour Python
 
 **Astuce #2** : on a créé un environnement virtuel;
-du coup il est opportun d'indiquer à vs-code qu'il faut utiliser `snake` -
+du coup il est opportun d'indiquer à vs-code qu'il faut utiliser `agario` -
 plutôt que `base`
 pour cela cliquer dans la bannière du bas la zone qui indique le Python courant
 
@@ -303,7 +303,7 @@ On peut par exemple utiliser les vecteurs de pygame.
 
 Il faut maintenant faire manger notre `blop`. On va procéder comme suit :
 
-* on a toujours la position du serpent dans une variable :
+* on a toujours la position du `blop` dans une variable :
 * on génère un "fruit", dans une position aléatoire
  
 ```python
@@ -312,7 +312,113 @@ fruit = (10, 10)
 ```
 
 * on affiche le fruits (un cercle rouge de rayon 10px par example)
-quand la position du `blop` est *proche* du fruit alors 
+quand la position du `blop` est *proche* du fruit alors :
   * le fruit disparait 
-  * au autre fruit disparait ailleurs
-  * (optionnel) le blop grossit)
+  * au autre fruit apparait ailleurs
+  * (optionnel) le blop grossit
+  
+# Options
+
+Pour les rapides, je vous invite à aborder les sujets suivants (dans l'ordre qui
+vous inspire le plus):
+
+## Afficher la taille du blop en titre de l'application :
+
+Rechercher comment fonctionne `pg.display.set_caption`
+
+## Plusieurs fruits
+
+Avoir plusieurs fruits de couleurs différentes.
+
+## Variables globales
+
+De manière générale, les variables globales sont considérées comme néfastes à la
+réutilisabilité du code; retouchez votre code pour minimiser le nombre de
+variables globales.
+
+## Ligne de commande
+
+On aimerait pouvoir passer sur la ligne de commande les paramètres du jeu; par
+exemple, le nombre de cases du tableau en hauteur et largeur, la taille d'une
+case en pixels, ...
+
+Indice: cherchez le module `argparse` dans la documentation Python.
+
+## Vitesse de réaction
+
+Ralentissez le jeu à 4 images/secondes; êtes-vous satisfait de la vitesse de
+réaction ? dit autrement, est-ce qu'il arrive que le `blop` va trop vite ?
+si oui modifiez votre code pour une bonne synchronisation
+
+De la même façon, si vous revenez artificiellement à une image par seconde ou
+moins, et que vous quittez le jeu avec 'q', est-ce que ça fonctionne
+immédiatement ? si non, comment améliorer le code pour que ce soit plus réactif ?
+
+Toujours à cette vitesse lente, que constatez-vous au tout début du jeu ? est-ce
+que c'est grave ? si on voulait vraiment le corriger (pas forcément utile en
+pratique hein), comment on pourrait faire ?
+
+# Notes à propos des environnements virtuels
+
+Voici un très rapide résumé des commandes pour gérer ses environnements virtuels
+
+* pour voir la liste
+
+  ```bash
+  conda env list
+  ```
+
+* pour entrer dans un environnement
+
+  ```bash
+  conda activate agario
+  ```
+
+* pour sortir de l'environnement
+
+  ```bash
+  conda deactivate
+  ```
+
+* pour voir dans quel environnement on se trouve (normalement vous avez ça aussi dans le *prompt*)
+
+  ```bash
+  echo echo $CONDA_DEFAULT_ENV
+  ```
+
+* pour créer un nouvel environnement
+
+  ```bash
+  conda create -n un-nouveau python=3.10
+  ```
+
+  (le fait de spécifier la version de Python est optionnel, mais recommandé)
+
+* pour détruire un environnement
+
+  ```bash
+  conda env remove -n un-nouveau
+  ```
+
+  **remarquez** comment il n'y a pas de `env` pour `create`, mais il en faut un pour `remove` ...
+
+
+# Note à propos des dépôts git imbriqués
+
+Si vous avez reçu ce TP depuis un dépôt git (celui de votre cours d'info), ce
+qu'on vous invite à faire c'est finalement de créer un dépôt git ... à
+l'intérieur d'un autre dépôt git.
+
+Sachez que ça marche sans aucun souci (et en pratique on finit par avoir ce
+genre de tricotage avec une profondeur non triviale, 3 voire même parfois 4 dépôts les
+uns dans les autres)
+
+La seule chose à savoir c'est que, lorsque vous tapez une commande `git`, pour
+trouver le "bon" dépôt, on utilise assez naturellement l'algo suivant:
+
+> on regarde si le dossier courant est un dépôt git, si oui on a trouvé, sinon on
+regarde dans le dossier parent, et ainsi de suite
+
+Donc c'est assez simple, mais surtout au tout début,
+faites juste attention à ne pas ajouter vos fichiers dans le mauvais dépôt
+
