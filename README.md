@@ -45,7 +45,7 @@ Commencez par créer et activer un environnement dédié au TP:
 
 ```bash
 # on commence par créer un environnement "agario"
-(base) $ conda create -n agario python=3.9
+(base) $ conda create -n agario python=3.10
 # puis on l'active
 (base) $ conda activate agario
 # votre terminal doit indiquer le nom d'environnement:
