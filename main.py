@@ -7,7 +7,7 @@ import pygame as pg
 from pygame.color import THECOLORS as COLORS
 from pygame.math import Vector2 as V2
 
-OVERMAP_BG = COLORS["white"]
+OVERMAP_BG = COLORS["grey"]
 BOARD_COLOR = COLORS["grey"]
 BACKGROUND_COLOR = COLORS["black"]
 
