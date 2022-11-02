@@ -8,7 +8,7 @@ from pygame.color import THECOLORS as COLORS
 from pygame.math import Vector2 as V2
 
 OVERMAP_BG = COLORS["white"]
-BOARD_COLOR = COLORS["grey"]
+BOARD_COLOR = COLORS["red"]
 BACKGROUND_COLOR = COLORS["black"]
 
 SCREEN = V2(1200, 800)
