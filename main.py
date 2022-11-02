@@ -32,6 +32,10 @@ def clamp(value, min_value, max_value):
 def generate_random_color():
     return random.randrange(255), random.randrange(255), random.randrange(255)
 
+
+
+#ceci est une modification
+
 # Drawing functions
 def draw_background(screen):
     full_screen = pg.Rect(0, 0, WIDTH, HEIGHT)
