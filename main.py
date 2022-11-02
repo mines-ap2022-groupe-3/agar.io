@@ -20,7 +20,7 @@ TILE_SIZE = 50
 MAP = 2 * SCREEN
 M_WIDTH, M_HEIGHT = MAP
 
-MAX_SPEED = 100
+MAX_SPEED = 200
 
 # Utilities
 def round_to(n, div):
