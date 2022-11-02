@@ -8,20 +8,20 @@ from pygame.color import THECOLORS as COLORS
 from pygame.math import Vector2 as V2
 
 OVERMAP_BG = COLORS["white"]
-BOARD_COLOR = COLORS["grey"]
+BC = COLORS["grey"]
 BACKGROUND_COLOR = COLORS["black"]
 
 SCREEN = V2(1200, 800)
 WIDTH, HEIGHT = SCREEN
 SCREEN_CENTER = SCREEN / 2
 
-TILE_SIZE = 50
+TILE_SIZE = 100
 
 MAP = 2 * SCREEN
 M_WIDTH, M_HEIGHT = MAP
 
 MAX_SPEED = 100
-
+blablabla
 # Utilities
 def round_to(n, div):
     return floor(n / div) * div
