@@ -9,7 +9,7 @@ from pygame.math import Vector2 as V2
 
 OVERMAP_BG = COLORS["white"]
 BOARD_COLOR = COLORS["grey"]
-BACKGROUND_COLOR = COLORS["black"]
+BACKGROUND_COLOR = COLORS["red"]
 
 SCREEN = V2(1200, 800)
 WIDTH, HEIGHT = SCREEN
