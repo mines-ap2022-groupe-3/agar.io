@@ -6,10 +6,11 @@ from math import floor
 import pygame as pg
 from pygame.color import THECOLORS as COLORS
 from pygame.math import Vector2 as V2
+import pygame_menu as pgm
 
 OVERMAP_BG = COLORS["white"]
 BOARD_COLOR = COLORS["grey"]
-BACKGROUND_COLOR = COLORS["blue"]
+BACKGROUND_COLOR = COLORS["black"]
 
 SCREEN = V2(1200, 800)
 WIDTH, HEIGHT = SCREEN
@@ -83,6 +84,8 @@ def draw_overmap(screen, position):
         mask = pg.Rect(0, M_HEIGHT - display_rect.bottom + HEIGHT, WIDTH, HEIGHT)
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
+def change_color(name='Red',tuple=(255,0,0)):
+    return tuple
 
 def main():
     clock = pg.time.Clock()
@@ -94,9 +97,24 @@ def main():
     # On donne un titre à la fenetre
     pg.display.set_caption("agario")
 
-    color = generate_random_color()
+    color = change_color()
     speed = 4
     position = V2(MAP) / 2
+
+    #menu options
+    menu_pause = pgm.Menu(height=0.7*HEIGHT,theme=pgm.themes.THEME_BLUE,
+        title='Pause',width=0.75*WIDTH)
+
+    def disabling(menu=menu_pause):
+        menu.disable()
+
+    name_input = menu_pause.add.text_input('Pseudo: ', default='Blop', maxchar=10)
+    color_input = menu_pause.add.selector('Color: ', [('Red', (255,0,0)), ('Blue', (0,0,255)), ('Green', (0,255,0)), ('Yellow', (255,255,0)), ('Cyan', (0,255,255)), ('Violet', (255,0,255))], onchange=change_color)
+    menu_pause.add.button('Resume', disabling)
+    menu_pause.add.button('Quit', pgm.events.EXIT) 
+    
+    # options de texte
+    pseudo_font = pg.font.SysFont('Arial Black', 15)
 
     # La boucle du jeu
     done = False
@@ -123,9 +141,14 @@ def main():
         draw_map(screen, position)
         draw_overmap(screen, position)
 
+        # actualisation du blop
+        color = (color_input.get_value())[0][1]
         draw_blob(screen, color=color)
+        user_name = name_input.get_value()
+        pseudo = pseudo_font.render(f'{user_name}', True, COLORS["white"])
+        screen.blit(pseudo, SCREEN_CENTER - V2(20,15))
 
-        pg.display.update()
+        menu_pause.disable()
 
         # on itère sur tous les évênements qui ont eu lieu depuis le précédent appel
         # ici donc tous les évènements survenus durant la seconde précédente
@@ -139,6 +162,13 @@ def main():
                 # si la touche est "Q" ou "escape" on veut quitter le programme
                 if event.key == pg.K_q or event.key == pg.K_ESCAPE:
                     done = True
+                if event.key == pg.K_p :
+                    menu_pause.enable()
+                    menu_pause.mainloop(screen)
+                    menu_pause.disable()
+        #if menu_pause.is_enabled():
+            #menu_pause.mainloop(screen)
+        pg.display.update()
 
     pg.quit()
 
