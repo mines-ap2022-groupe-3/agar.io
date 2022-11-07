@@ -83,6 +83,46 @@ def draw_overmap(screen, position):
         mask = pg.Rect(0, M_HEIGHT - display_rect.bottom + HEIGHT, WIDTH, HEIGHT)
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
+#génération fruit
+fruits = {}
+
+def generate_random_fruit_position(position):
+
+    while True:
+        px = int(position.x)
+        py = int(position.y)
+        x, y = random.randint(px - WIDTH//2, px + WIDTH//2), random.randint(py - HEIGHT//2, py + HEIGHT//2)
+        fruit_key = V2(x, y)
+        if fruit_key not in fruits.keys: break
+
+    return fruit_key
+
+
+def generate_fruit(fruits, position):
+    if fruits == {} or (random.random()>0.95 and len(fruits)<100):
+        fruit_key = generate_random_fruit_position(position)
+        color = generate_random_color()
+        fruits[fruit_key] = color
+
+#affichage fruits
+
+def draw_fruits(screen, position, fruits):
+    for fruit_key in fruits.keys:
+        centerx = clamp(fruit_key.x - position.x, min_value = -WIDTH//2, max_value = WIDTH//2)
+        centery = clamp(fruit_key.y - position.y, min_value = -HEIGHT//2, max_value = HEIGHT//2)
+        center = (centerx, centery)
+        color = fruits[fruit_key]
+
+        pg.draw.circle(screen, color, center, 10)
+
+#Manger fruit
+
+def eat_fruit(position, fruits):
+    for fruit_key in fruits.keys:
+        if (position-fruit_key).lengh() < size:
+            del fruits[fruit_key]
+            size += 5
+
 
 def main():
     clock = pg.time.Clock()
@@ -123,6 +163,9 @@ def main():
         draw_map(screen, position)
         draw_overmap(screen, position)
 
+        generate_fruit(fruits, position)
+        eat_fruit(position, fruits)
+        draw_fruits(screen, position, fruits)
         draw_blob(screen, color=color)
 
         pg.display.update()
