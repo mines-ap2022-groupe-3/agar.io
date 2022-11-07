@@ -60,7 +60,7 @@ def draw_map(screen, position, tile_size=TILE_SIZE):
         pg.draw.line(screen, BOARD_COLOR, (0, pos_j), (WIDTH, pos_j))
 
 
-def draw_blob(screen, size=20, color=None):
+def draw_blob(screen, size, color=None):
     x, y = SCREEN_CENTER
     pg.draw.circle(screen, color, (x, y), size)
 
@@ -84,44 +84,50 @@ def draw_overmap(screen, position):
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
 #génération fruit
-fruits = {}
+pos_fruits = []
+col_fruits = []
+
+def inside_map(pos_fruit):
+    pos_fruit = pos_fruit
+    return pos_fruit.x - WIDTH/2>0 and pos_fruit.x - WIDTH/2<M_WIDTH and pos_fruit.y - HEIGHT/2>0 and pos_fruit.y - HEIGHT/2<M_HEIGHT
 
 def generate_random_fruit_position(position):
-
     while True:
         px = int(position.x)
         py = int(position.y)
-        x, y = random.randint(px - WIDTH//2, px + WIDTH//2), random.randint(py - HEIGHT//2, py + HEIGHT//2)
-        fruit_key = V2(x, y)
-        if fruit_key not in fruits.keys: break
+        x, y = random.randint(px, px + WIDTH), random.randint(py, py + HEIGHT)
+        pos_fruit = V2(x, y)
+        if inside_map(pos_fruit): break
 
-    return fruit_key
+    pos_fruits.append(pos_fruit)
 
 
-def generate_fruit(fruits, position):
-    if fruits == {} or (random.random()>0.95 and len(fruits)<100):
-        fruit_key = generate_random_fruit_position(position)
+def generate_fruit(pos_fruits, position):
+    if pos_fruits == [] or (random.random()>0.99 and len(pos_fruits)<20):
+        generate_random_fruit_position(position)
         color = generate_random_color()
-        fruits[fruit_key] = color
+        col_fruits.append(color)
 
 #affichage fruits
 
-def draw_fruits(screen, position, fruits):
-    for fruit_key in fruits.keys:
-        centerx = clamp(fruit_key.x - position.x, min_value = -WIDTH//2, max_value = WIDTH//2)
-        centery = clamp(fruit_key.y - position.y, min_value = -HEIGHT//2, max_value = HEIGHT//2)
+def draw_fruits(screen, position, pos_fruits, col_fruits):
+    for pos_fruit, color in zip(pos_fruits, col_fruits):
+        centerx = clamp(pos_fruit.x - position.x, min_value = 0, max_value = WIDTH)
+        centery = clamp(pos_fruit.y - position.y, min_value = 0, max_value = HEIGHT)
         center = (centerx, centery)
-        color = fruits[fruit_key]
 
         pg.draw.circle(screen, color, center, 10)
 
 #Manger fruit
 
-def eat_fruit(position, fruits):
-    for fruit_key in fruits.keys:
-        if (position-fruit_key).lengh() < size:
-            del fruits[fruit_key]
+def eat_fruit(position, pos_fruits, size):
+    for pos_fruit in pos_fruits:
+        if (position+SCREEN//2-pos_fruit).length() < size:
+            i = pos_fruits.index(pos_fruit)
+            del pos_fruits[i]
+            del col_fruits[i]
             size += 5
+    return size
 
 
 def main():
@@ -134,6 +140,8 @@ def main():
     # On donne un titre à la fenetre
     pg.display.set_caption("agario")
 
+    
+    BLOB_SIZE = 20
     color = generate_random_color()
     speed = 4
     position = V2(MAP) / 2
@@ -163,10 +171,10 @@ def main():
         draw_map(screen, position)
         draw_overmap(screen, position)
 
-        generate_fruit(fruits, position)
-        eat_fruit(position, fruits)
-        draw_fruits(screen, position, fruits)
-        draw_blob(screen, color=color)
+        generate_fruit(pos_fruits, position)
+        BLOB_SIZE = eat_fruit(position, pos_fruits, size = BLOB_SIZE)
+        draw_fruits(screen, position, pos_fruits, col_fruits)
+        draw_blob(screen, size = BLOB_SIZE, color=color)
 
         pg.display.update()
 
