@@ -87,11 +87,14 @@ def draw_overmap(screen, position):
 pos_fruits = []
 col_fruits = []
 
+
 def inside_map(pos_fruit):
-    pos_fruit = pos_fruit
+    """test si le fruit généré est dans la map"""
     return pos_fruit.x - WIDTH/2>0 and pos_fruit.x - WIDTH/2<M_WIDTH and pos_fruit.y - HEIGHT/2>0 and pos_fruit.y - HEIGHT/2<M_HEIGHT
 
+
 def generate_random_fruit_position(position):
+    """génère une position aléatoire"""
     while True:
         px = int(position.x)
         py = int(position.y)
@@ -101,8 +104,8 @@ def generate_random_fruit_position(position):
 
     pos_fruits.append(pos_fruit)
 
-
 def generate_fruit(pos_fruits, position):
+    """génère un fruit aléatoirement sur le screen"""
     if pos_fruits == [] or (random.random()>0.99 and len(pos_fruits)<20):
         generate_random_fruit_position(position)
         color = generate_random_color()
@@ -111,8 +114,9 @@ def generate_fruit(pos_fruits, position):
 #affichage fruits
 
 def draw_fruits(screen, position, pos_fruits, col_fruits):
+    """affiche les fruits"""
     for pos_fruit, color in zip(pos_fruits, col_fruits):
-        centerx = clamp(pos_fruit.x - position.x, min_value = 0, max_value = WIDTH)
+        centerx = clamp(pos_fruit.x - position.x, min_value = 0, max_value = WIDTH) #on affiche les fruits en dehors de screen pour savoir par ou aller
         centery = clamp(pos_fruit.y - position.y, min_value = 0, max_value = HEIGHT)
         center = (centerx, centery)
 
@@ -121,6 +125,7 @@ def draw_fruits(screen, position, pos_fruits, col_fruits):
 #Manger fruit
 
 def eat_fruit(position, pos_fruits, size):
+    """si le fruit est assez proche, le mange. Renvoie la nouvelle taille après absorbation d'un ou plusieurs fruits"""
     for pos_fruit in pos_fruits:
         if (position+SCREEN//2-pos_fruit).length() < size:
             i = pos_fruits.index(pos_fruit)
