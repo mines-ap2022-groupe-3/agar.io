@@ -2,6 +2,7 @@
 
 import random
 from math import floor
+from math import sqrt
 
 import pygame as pg
 from pygame.color import THECOLORS as COLORS
@@ -21,6 +22,12 @@ MAP = 2 * SCREEN
 M_WIDTH, M_HEIGHT = MAP
 
 MAX_SPEED = 100
+
+
+
+position_f = []
+for i in range(100) : 
+    position_f.append((random.randint(0,1200),random.randint(0,800)))
 
 # Utilities
 def round_to(n, div):
@@ -60,7 +67,7 @@ def draw_map(screen, position, tile_size=TILE_SIZE):
         pg.draw.line(screen, BOARD_COLOR, (0, pos_j), (WIDTH, pos_j))
 
 
-def draw_blob(screen, size=20, color=None):
+def draw_blob(screen, size = 20, color=None):
     x, y = SCREEN_CENTER
     pg.draw.circle(screen, color, (x, y), size)
 
@@ -97,6 +104,7 @@ def main():
     color = generate_random_color()
     speed = 4
     position = V2(MAP) / 2
+    blop_size = 20 
 
     # La boucle du jeu
     done = False
@@ -112,6 +120,8 @@ def main():
             new_direction = new_direction / MAX_SPEED
 
         position += new_direction * speed
+        for i in range(100):
+            position_f[i] -= new_direction * speed 
 
         pg.display.set_caption(f"agario - {position.x=:5.0f} - {position.y=:5.0f}")
 
@@ -123,7 +133,18 @@ def main():
         draw_map(screen, position)
         draw_overmap(screen, position)
 
-        draw_blob(screen, color=color)
+        draw_blob(screen, size = blop_size, color=color)
+
+        for i in range(100):
+            pg.draw.circle(screen,(255,0,0),position_f[i],5)
+
+        for i in range(100):
+            if sqrt((SCREEN_CENTER[0]-position_f[i][0])**2+(SCREEN_CENTER[1]-position_f[i][1])**2) < blop_size :
+                position_f[i] = (random.randint(0,1200),random.randint(0,800))
+                blop_size += 5
+                
+
+
 
         pg.display.update()
 
