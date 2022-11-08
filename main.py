@@ -168,6 +168,7 @@ def main():
                     menu_pause.disable()
         #if menu_pause.is_enabled():
             #menu_pause.mainloop(screen)
+            
         pg.display.update()
 
     pg.quit()
