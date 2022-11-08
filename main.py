@@ -6,10 +6,16 @@ from math import floor
 import pygame as pg
 from pygame.color import THECOLORS as COLORS
 from pygame.math import Vector2 as V2
+import pygame_menu as pg_menu
 
 OVERMAP_BG = COLORS["white"]
 BOARD_COLOR = COLORS["grey"]
 BACKGROUND_COLOR = COLORS["black"]
+COLOR_BLOP = COLORS["green"]
+
+PLAYER_NAME = 'Player'
+
+INDEX = [('Black','black'), ('White','white'), ('Blue','blue'), ('Red', 'red'), ('Green', 'green')]
 
 SCREEN = V2(1200, 800)
 WIDTH, HEIGHT = SCREEN
@@ -59,7 +65,6 @@ def draw_map(screen, position, tile_size=TILE_SIZE):
         pos_j = j - display_rect.y
         pg.draw.line(screen, BOARD_COLOR, (0, pos_j), (WIDTH, pos_j))
 
-
 def draw_blob(screen, size=20, color=None):
     x, y = SCREEN_CENTER
     pg.draw.circle(screen, color, (x, y), size)
@@ -83,6 +88,28 @@ def draw_overmap(screen, position):
         mask = pg.Rect(0, M_HEIGHT - display_rect.bottom + HEIGHT, WIDTH, HEIGHT)
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
+def change_color_background(index,color):
+    """Permet de changer la couleur du fond d'écran à partir du menu"""
+    global BACKGROUND_COLOR 
+    BACKGROUND_COLOR = COLORS[color]
+
+def change_color_blop(index, color):
+    """Permet de changer la couleur du blop à partir du menu"""
+    global COLOR_BLOP 
+    COLOR_BLOP = COLORS[color]
+
+def get_player_name(name):
+    """Permet de récupérer le nom du joueur à partir du menu"""
+    global PLAYER_NAME
+    PLAYER_NAME = name
+
+def PAUSE_MENU(pauseMenu,screen):
+    """Pour faire tourner le menu pause"""
+    while pauseMenu.is_enabled() : 
+        events = pg.event.get()
+        pauseMenu.draw(screen)
+        pauseMenu.update(events)
+        pg.display.update()
 
 def main():
     clock = pg.time.Clock()
@@ -94,15 +121,30 @@ def main():
     # On donne un titre à la fenetre
     pg.display.set_caption("agario")
 
-    color = generate_random_color()
+    # Création du menu de pause et initialisation des différents éléments 
+    pauseMenu = pg_menu.Menu('Pause',WIDTH/2, HEIGHT/2,theme=pg_menu.themes.THEME_BLUE)
+    pauseMenu.add.text_input('Name : ', default='Player', onchange = get_player_name)
+    pauseMenu.add.selector('Couleur du fond : ', INDEX, onchange=change_color_background)
+    pauseMenu.add.selector('Couleur du blop : ', INDEX, onchange=change_color_blop)
+    pauseMenu.add.button('Continuer', pauseMenu.disable)
+    pauseMenu.add.button('Recommencer', main)
+    pauseMenu.add.button('Quitter',pg_menu.events.EXIT)
+    pauseMenu.disable() # par défault on n'affiche pas le menu 
+
     speed = 4
     position = V2(MAP) / 2
+
+
 
     # La boucle du jeu
     done = False
     while not done:
         # FPS
         clock.tick(60) 
+        
+        # Je commence par regarder si je dois afficher le menu
+        if pauseMenu.is_enabled():
+            PAUSE_MENU(pauseMenu, screen)
 
         # On trouve la nouvelle direction/position
         new_direction = V2(pg.mouse.get_pos()) - V2(SCREEN_CENTER)
@@ -113,7 +155,7 @@ def main():
 
         position += new_direction * speed
 
-        pg.display.set_caption(f"agario - {position.x=:5.0f} - {position.y=:5.0f}")
+        pg.display.set_caption(f"agario - {position.x=:5.0f} - {position.y=:5.0f} - Partie de {PLAYER_NAME}")
 
         # On s'assure que la position ne sorte pas de la map
         position.x = clamp(position.x, 0, M_WIDTH)
@@ -122,8 +164,7 @@ def main():
         draw_background(screen)
         draw_map(screen, position)
         draw_overmap(screen, position)
-
-        draw_blob(screen, color=color)
+        draw_blob(screen, color=COLOR_BLOP)
 
         pg.display.update()
 
@@ -139,11 +180,12 @@ def main():
                 # si la touche est "Q" ou "escape" on veut quitter le programme
                 if event.key == pg.K_q or event.key == pg.K_ESCAPE:
                     done = True
-
+                if event.key == pg.K_p : 
+                    #Si la touche "p" est appuyée on rentre dans le menu Pause
+                    pauseMenu.enable()
     pg.quit()
 
 
 # if python says run, then we should run
 if __name__ == "__main__":
     main()
-    # print(round_to(105, 19))
