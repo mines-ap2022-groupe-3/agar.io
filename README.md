@@ -13,7 +13,7 @@ sous-optimal, le mieux est le lire avec vs-code, ou en HTML statique.
 ## Objectifs et démarche
 
 Gardez en tête que votre objectif est de réaliser un **programme qui marche** et
-pas un programme parfait.  
+pas un programme parfait.
 Aussi on va commencer par se créer un dossier vierge, et l'initialiser **comme un
 dépôt `git`** (on fait comment déjà ?)
 
@@ -24,7 +24,7 @@ $ # et là on crée un dépôt git avec ??
 ```
 
 Et ensuite, on va bien faire attention de **committer chaque fois** qu'on aura
-**une version qui marche**  
+**une version qui marche**
 c'est-à-dire dans ce TP très guidé, **un commit par
 étape** en gros !
 
@@ -268,7 +268,7 @@ une fois que ça marche, vous faites quoi ?
 
 ## Un `blop`
 
-L'étape suivante est de dessiner le `blop`. 
+L'étape suivante est de dessiner le `blop`.
 Pour cela nous utiliserons https://www.pygame.org/docs/ref/draw.html#pygame.draw.circle
 
 Nous allons créer un cercle de rayon 80 pixels au centre de l'écran.
@@ -281,7 +281,7 @@ Nous créons un vecteur de "direction"
 direction = (1, 0)
 ```
 
-à chaque itération de la boucle, 
+à chaque itération de la boucle,
 nous pouvons déplacer le blop dans cette direction en "ajoutant" ce vecteur à la position du blop.
 
 ## Un `blop` qui suit la souris
@@ -305,7 +305,7 @@ Il faut maintenant faire manger notre `blop`. On va procéder comme suit :
 
 * on a toujours la position du `blop` dans une variable :
 * on génère un "fruit", dans une position aléatoire
- 
+
 ```python
 # exemple de fruit en position 10, 10 sur le plateau
 fruit = (10, 10)
@@ -313,10 +313,10 @@ fruit = (10, 10)
 
 * on affiche le fruits (un cercle rouge de rayon 10px par example)
 quand la position du `blop` est *proche* du fruit alors :
-  * le fruit disparait 
+  * le fruit disparait
   * au autre fruit apparait ailleurs
   * (optionnel) le blop grossit
-  
+
 # Options
 
 Pour les rapides, je vous invite à aborder les sujets suivants (dans l'ordre qui
@@ -421,4 +421,3 @@ regarde dans le dossier parent, et ainsi de suite
 
 Donc c'est assez simple, mais surtout au tout début,
 faites juste attention à ne pas ajouter vos fichiers dans le mauvais dépôt
-

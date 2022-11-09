@@ -34,7 +34,7 @@ Pour formatter un fichier python, il suffit de lancer la commande suivante:
 
 !attention! Cette commande va formatter tous les fichiers python du dossier courant. Il est donc important de commiter ses changements avant de lancer cette commande.
 
-Conseil: penser à utiliser `git diff` pour vérifier que les changements sont corrects (si ce n'est pas le cas, il est toujours possible de revenir en arrière avec `git checkout`). 
+Conseil: penser à utiliser `git diff` pour vérifier que les changements sont corrects (si ce n'est pas le cas, il est toujours possible de revenir en arrière avec `git checkout`).
 Vous êtes responsable de vos changements et pas `black` qui n'est qu'un outil pour vous aider.
 
 Pour les plus courageux, il est possible (mais pas toujours recommender) de lancer `black` avec une configuration spécifique (voir documentation).
