@@ -145,7 +145,7 @@ def draw_fruits(screen, position, pos_fruits, col_fruits):
 # Manger fruit
 
 
-def eat_fruit(position, pos_fruits, size):
+def eat_fruit(position, pos_fruits, size) -> int:
     """si le fruit est assez proche, le mange. Renvoie la nouvelle taille après absorbation d'un ou plusieurs fruits"""
     for pos_fruit in pos_fruits:
         if (position + SCREEN // 2 - pos_fruit).length() < size:
