@@ -66,9 +66,46 @@ def draw_map(screen, position, tile_size=TILE_SIZE):
         pg.draw.line(screen, BOARD_COLOR, (0, pos_j), (WIDTH, pos_j))
 
 
-def draw_blob(screen, size=20, color=None):
+def draw_blob(screen, size=20, color=None, skin=1, color_alea="White"):
     x, y = SCREEN_CENTER
-    pg.draw.circle(screen, color, (x, y), size)
+    if skin == 1:
+        pg.draw.circle(screen, color, (x, y), size)
+    if skin == 2:
+        pg.draw.circle(screen, color_alea, (x, y), size)
+        pg.draw.circle(screen, color, (x, y), size - 3)
+    elif skin == 3:
+        pg.draw.circle(screen, color_alea, (x, y), size)
+        pg.draw.circle(screen, color, (x, y), size - 3)
+        pg.draw.aalines(
+            screen,
+            color_alea,
+            True,
+            points=[
+                (x - 9, y - 11),
+                (x + 11, y + 9),
+                (x + 9, y + 11),
+                (x - 11, y - 9),
+                (x - 9, y - 11),
+            ],
+        )
+        pg.draw.aalines(
+            screen, color_alea, True, points=[(x - 10, y - 10), (x + 10, y + 10)]
+        )
+        pg.draw.aalines(
+            screen,
+            color_alea,
+            True,
+            points=[
+                (x - 11, y + 9),
+                (x + 9, y - 11),
+                (x + 11, y - 9),
+                (x - 9, y + 11),
+                (x - 11, y + 9),
+            ],
+        )
+        pg.draw.aalines(
+            screen, color_alea, True, points=[(x - 10, y + 10), (x + 10, y - 10)]
+        )
 
 
 def draw_overmap(screen, position):
@@ -94,6 +131,10 @@ def draw_overmap(screen, position):
 
 
 def main():
+    print("Veuillez choisir votre couleur :")
+    couleur_choisie = input()
+    print("Veuillez choisir votre skin (entre 1 et 3):")
+    skin = int(input())
     clock = pg.time.Clock()
 
     # on initialise pygame et on crée une fenêtre de 800x800 pixels
@@ -103,7 +144,7 @@ def main():
     # On donne un titre à la fenetre
     pg.display.set_caption("agario")
 
-    color = generate_random_color()
+    color_alea = generate_random_color()
     speed = 4
     position = V2(MAP) / 2
 
@@ -132,7 +173,7 @@ def main():
         draw_map(screen, position)
         draw_overmap(screen, position)
 
-        draw_blob(screen, color=color)
+        draw_blob(screen, color=couleur_choisie, skin=skin, color_alea=color_alea)
 
         pg.display.update()
 
