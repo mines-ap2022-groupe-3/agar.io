@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
 import random
-from math import floor
+from math import floor,sqrt
 
 import pygame as pg
 from pygame.color import THECOLORS as COLORS
 from pygame.math import Vector2 as V2
 
-OVERMAP_BG = COLORS["white"]
+OVERMAP_BG = COLORS["grey"]
 BOARD_COLOR = COLORS["grey"]
 BACKGROUND_COLOR = COLORS["black"]
 
@@ -21,6 +21,8 @@ MAP = 2 * SCREEN
 M_WIDTH, M_HEIGHT = MAP
 
 MAX_SPEED = 100
+
+
 
 # Utilities
 def round_to(n, div):
@@ -92,6 +94,12 @@ def draw_overmap(screen, position):
         mask = pg.Rect(0, M_HEIGHT - display_rect.bottom + HEIGHT, WIDTH, HEIGHT)
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
+def random_position_generator():
+    return random.randint(0,HEIGHT), random.randint(0,WIDTH)
+
+def draw_fruit(screen, position, size=5, color=None):
+    x,y = position
+    pg.draw.circle(screen, color, (x, y), size)
 
 def main():
     clock = pg.time.Clock()
@@ -106,6 +114,9 @@ def main():
     color = generate_random_color()
     speed = 4
     position = V2(MAP) / 2
+    pos_fruit = random_position_generator()
+    color_fruit = generate_random_color()
+    blop_size = 20
 
     # La boucle du jeu
     done = False
@@ -121,7 +132,8 @@ def main():
             new_direction = new_direction / MAX_SPEED
 
         position += new_direction * speed
-
+        pos_fruit -= new_direction * speed
+        
         pg.display.set_caption(f"agario - {position.x=:5.0f} - {position.y=:5.0f}")
 
         # On s'assure que la position ne sorte pas de la map
@@ -132,7 +144,16 @@ def main():
         draw_map(screen, position)
         draw_overmap(screen, position)
 
-        draw_blob(screen, color=color)
+        draw_fruit(screen, pos_fruit, color = color_fruit)
+
+        draw_blob(screen, size = blop_size, color=color)
+
+        #manger le fruit 
+        if sqrt((pos_fruit[0]-SCREEN_CENTER[0])**2 + (pos_fruit[1]-SCREEN_CENTER[1])**2) <= blop_size:
+            blop_size += 5
+            pos_fruit = random_position_generator()
+            color_fruit = generate_random_color()
+
 
         pg.display.update()
 
