@@ -7,6 +7,10 @@ import pygame as pg
 from pygame.color import THECOLORS as COLORS
 from pygame.math import Vector2 as V2
 
+import time
+import pyautogui
+import matplotlib.pyplot as plt
+
 OVERMAP_BG = COLORS["white"]
 BOARD_COLOR = COLORS["blue"]
 BACKGROUND_COLOR = COLORS["black"]
@@ -31,6 +35,23 @@ def clamp(value, min_value, max_value):
 
 def generate_random_color():
     return random.randrange(255), random.randrange(255), random.randrange(255)
+
+def take_screenshot(screen):
+    myscreen = pyautogui.screenshot(region=(50,0,WIDTH, HEIGHT))
+    myscreen.save('myscreen.jpg')
+    
+
+def fichier_text():
+    f = open('map.txt', 'w')
+    im = plt.imread('myscreen.jpg')
+    for i in range (len(im)):
+        for j in range(len(im[0])):
+            if im[i][j] == BACKGROUND_COLOR or im[i][j] ==  BOARD_COLOR:
+                f.write(' ')
+            else:
+                f.write('o')
+        f.write('\n')
+  
 
 # Drawing functions
 def draw_background(screen):
@@ -83,7 +104,6 @@ def draw_overmap(screen, position):
         mask = pg.Rect(0, M_HEIGHT - display_rect.bottom + HEIGHT, WIDTH, HEIGHT)
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
-
 def main():
     clock = pg.time.Clock()
 
@@ -118,14 +138,20 @@ def main():
         # On s'assure que la position ne sorte pas de la map
         position.x = clamp(position.x, 0, M_WIDTH)
         position.y = clamp(position.y, 0, M_HEIGHT)
-
+    
         draw_background(screen)
         draw_map(screen, position)
         draw_overmap(screen, position)
-
         draw_blob(screen, color=color)
+        
+        #draw_fruit(screen, positionf=position , color=color)
+
+        
 
         pg.display.update()
+
+
+
 
         # on itère sur tous les évênements qui ont eu lieu depuis le précédent appel
         # ici donc tous les évènements survenus durant la seconde précédente
@@ -136,6 +162,9 @@ def main():
                 done = True
             # un type de pg.KEYDOWN signifie que l'on a appuyé une touche du clavier
             elif event.type == pg.KEYDOWN:
+                if event.key == pg.K_s:
+                    take_screenshot(screen)
+                    #fichier_text()
                 # si la touche est "Q" ou "escape" on veut quitter le programme
                 if event.key == pg.K_q or event.key == pg.K_ESCAPE:
                     done = True
