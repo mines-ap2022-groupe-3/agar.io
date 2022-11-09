@@ -107,6 +107,8 @@ def main():
     speed = 4
     position = V2(MAP) / 2
 
+    # fruits=[[posf,(randint(0,256),randint(0,256),randint(0,256))]]
+
     # La boucle du jeu
     done = False
     while not done:
@@ -128,6 +130,23 @@ def main():
         position.x = clamp(position.x, 0, M_WIDTH)
         position.y = clamp(position.y, 0, M_HEIGHT)
 
+        # Un fruit apparait avec une certaine probabilité
+        # if random() < 0.005:
+        #   fruits.append(
+        #       [
+        #           (randint(0, 630), randint(0, 630)),
+        #           (randint(0, 256), randint(0, 256), randint(0, 256)),
+        #       ]
+        #   )  # On ajoute un fruit dans la liste, de position et de couleur aléatoires
+
+        # for k in fruits:
+        #   pg.draw.circle(screen, center=k[0], color=k[1], radius=10)
+        #   if (
+        #       pg.math.Vector2.distance_to(pg.Vector2(position), pg.Vector2(k[0]))
+        #       < radiusblop + 10
+        #   ):  # Si le blop se rapproche suffisamment d'un des fruits de la liste
+        #       fruits.remove(k)
+        #       radiusblop += 2
         draw_background(screen)
         draw_map(screen, position)
         draw_overmap(screen, position)
