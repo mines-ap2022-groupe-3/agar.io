@@ -32,17 +32,17 @@ def clamp(value, min_value, max_value):
     return min(max_value, max(value, min_value))
 
 
-def generate_random_color():
+def generate_random_color() :
     return random.randrange(255), random.randrange(255), random.randrange(255)
 
 
 # Drawing functions
-def draw_background(screen):
+def draw_background(screen) :
     full_screen = pg.Rect(0, 0, WIDTH, HEIGHT)
     pg.draw.rect(screen, BACKGROUND_COLOR, full_screen)
 
 
-def draw_map(screen, position, tile_size=TILE_SIZE):
+def draw_map(screen, position, tile_size=TILE_SIZE) :
     display_rect = pg.Rect(
         position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
     )
