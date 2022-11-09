@@ -116,8 +116,8 @@ def generate_fruit(pos_fruits, position):
 def draw_fruits(screen, position, pos_fruits, col_fruits):
     """affiche les fruits"""
     for pos_fruit, color in zip(pos_fruits, col_fruits):
-        centerx = clamp(pos_fruit.x - position.x, min_value = 0, max_value = WIDTH) #on affiche les fruits en dehors de screen pour savoir par ou aller
-        centery = clamp(pos_fruit.y - position.y, min_value = 0, max_value = HEIGHT)
+        centerx = pos_fruit.x - position.x
+        centery = pos_fruit.y - position.y
         center = (centerx, centery)
 
         pg.draw.circle(screen, color, center, 10)
