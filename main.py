@@ -39,7 +39,7 @@ def generate_random_color():
 # Drawing        functions
 def draw_background(screen)       :
     full_screen = pg.Rect(0, 0, WIDTH, HEIGHT)
-    pg.draw.rect(screen, BACKGROUND_COLOR, full_screen)
+    pg.draw.rect(screen, BACKGROUND_COLOR,     full_screen)
 
 
 def draw_map(screen, position, tile_size=TILE_SIZE):
