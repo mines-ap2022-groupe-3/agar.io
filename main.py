@@ -154,8 +154,6 @@ def main():
         draw_overmap(screen, position)
         draw_blob(screen, color=color)
 
-        # draw_fruit(screen, positionf=position , color=color)
-
         pg.display.update()
 
         # on itère sur tous les évênements qui ont eu lieu depuis le précédent appel
@@ -169,7 +167,7 @@ def main():
             elif event.type == pg.KEYDOWN:
                 if event.key == pg.K_s:
                     take_screenshot(screen)
-                    # fichier_text()
+                    fichier_text()
                 # si la touche est "Q" ou "escape" on veut quitter le programme
                 if event.key == pg.K_q or event.key == pg.K_ESCAPE:
                     done = True
