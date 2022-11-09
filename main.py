@@ -27,19 +27,25 @@ MAX_SPEED = 100
 def round_to(n, div):
     return floor(n / div) * div
 
+
 def clamp(value, min_value, max_value):
     return min(max_value, max(value, min_value))
 
+
 def generate_random_color():
     return random.randrange(255), random.randrange(255), random.randrange(255)
+
 
 # Drawing functions
 def draw_background(screen):
     full_screen = pg.Rect(0, 0, WIDTH, HEIGHT)
     pg.draw.rect(screen, BACKGROUND_COLOR, full_screen)
 
+
 def draw_map(screen, position, tile_size=TILE_SIZE):
-    display_rect = pg.Rect(position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT)
+    display_rect = pg.Rect(
+        position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
+    )
 
     first_square_left = int(max(0, round_to(display_rect.left, tile_size)))
     first_square_top = int(max(0, round_to(display_rect.top, tile_size)))
@@ -65,15 +71,18 @@ def draw_blob(screen, size=20, color=None):
     x, y = SCREEN_CENTER
     pg.draw.circle(screen, color, (x, y), size)
 
+
 def draw_overmap(screen, position):
-    display_rect = pg.Rect(position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT)
+    display_rect = pg.Rect(
+        position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
+    )
 
     if display_rect.left < 0:
-        mask = pg.Rect(0, 0, - display_rect.left, HEIGHT)
+        mask = pg.Rect(0, 0, -display_rect.left, HEIGHT)
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
     if display_rect.top < 0:
-        mask = pg.Rect(0, 0, WIDTH, - display_rect.top)
+        mask = pg.Rect(0, 0, WIDTH, -display_rect.top)
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
     if display_rect.right >= M_WIDTH:
@@ -84,20 +93,22 @@ def draw_overmap(screen, position):
         mask = pg.Rect(0, M_HEIGHT - display_rect.bottom + HEIGHT, WIDTH, HEIGHT)
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
+
 def change_color_back(color):
-    BACKGROUND_COLOR=COLORS[color]
+    BACKGROUND_COLOR = COLORS[color]
 
 
-def menu (screen):
-    menu = pg_menu.Menu('Paused', 600, 400,theme=pg_menu.themes.THEME_BLUE)
-    menu.add.text_input('Name :', default='Blop')
-    menu.add.button('Black', change_color_back('black'))
-    menu.add.button('White', change_color_back('white'))
-    menu.add.button('Blue', change_color_back('blue'))
-    menu.add.button('Green', change_color_back('green'))
-    menu.add.button('Resume', pg_menu.events.CLOSE)
-    menu.add.button('Quit', pg_menu.events.EXIT)
+def menu(screen):
+    menu = pg_menu.Menu("Paused", 600, 400, theme=pg_menu.themes.THEME_BLUE)
+    menu.add.text_input("Name :", default="Blop")
+    menu.add.button("Black", change_color_back("black"))
+    menu.add.button("White", change_color_back("white"))
+    menu.add.button("Blue", change_color_back("blue"))
+    menu.add.button("Green", change_color_back("green"))
+    menu.add.button("Resume", pg_menu.events.CLOSE)
+    menu.add.button("Quit", pg_menu.events.EXIT)
     menu.mainloop(screen)
+
 
 def main():
     clock = pg.time.Clock()
@@ -117,7 +128,7 @@ def main():
     done = False
     while not done:
         # FPS
-        clock.tick(60) 
+        clock.tick(60)
 
         # On trouve la nouvelle direction/position
         new_direction = V2(pg.mouse.get_pos()) - V2(SCREEN_CENTER)
@@ -155,7 +166,7 @@ def main():
                 if event.key == pg.K_q or event.key == pg.K_ESCAPE:
                     done = True
                 if event.key == pg.K_p:
-                    menu (screen)
+                    menu(screen)
 
     pg.quit()
 
@@ -163,4 +174,4 @@ def main():
 # if python says run, then we should run
 if __name__ == "__main__":
     main()
-    #help("pygame_menu.add.button")
+    # help("pygame_menu.add.button")
