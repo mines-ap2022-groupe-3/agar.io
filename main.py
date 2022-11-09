@@ -30,36 +30,42 @@ MAX_SPEED = 100
 def round_to(n, div):
     return floor(n / div) * div
 
+
 def clamp(value, min_value, max_value):
     return min(max_value, max(value, min_value))
+
 
 def generate_random_color():
     return random.randrange(255), random.randrange(255), random.randrange(255)
 
+
 def take_screenshot(screen):
-    myscreen = pyautogui.screenshot(region=(50,0,WIDTH, HEIGHT))
-    myscreen.save('myscreen.jpg')
-    
+    myscreen = pyautogui.screenshot(region=(50, 0, WIDTH, HEIGHT))
+    myscreen.save("myscreen.jpg")
+
 
 def fichier_text():
-    f = open('map.txt', 'w')
-    im = plt.imread('myscreen.jpg')
-    for i in range (len(im)):
+    f = open("map.txt", "w")
+    im = plt.imread("myscreen.jpg")
+    for i in range(len(im)):
         for j in range(len(im[0])):
-            if im[i][j] == BACKGROUND_COLOR or im[i][j] ==  BOARD_COLOR:
-                f.write(' ')
+            if im[i][j] == BACKGROUND_COLOR or im[i][j] == BOARD_COLOR:
+                f.write(" ")
             else:
-                f.write('o')
-        f.write('\n')
-  
+                f.write("o")
+        f.write("\n")
+
 
 # Drawing functions
 def draw_background(screen):
     full_screen = pg.Rect(0, 0, WIDTH, HEIGHT)
     pg.draw.rect(screen, BACKGROUND_COLOR, full_screen)
 
+
 def draw_map(screen, position, tile_size=TILE_SIZE):
-    display_rect = pg.Rect(position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT)
+    display_rect = pg.Rect(
+        position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
+    )
 
     first_square_left = int(max(0, round_to(display_rect.left, tile_size)))
     first_square_top = int(max(0, round_to(display_rect.top, tile_size)))
@@ -85,15 +91,18 @@ def draw_blob(screen, size=20, color=None):
     x, y = SCREEN_CENTER
     pg.draw.circle(screen, color, (x, y), size)
 
+
 def draw_overmap(screen, position):
-    display_rect = pg.Rect(position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT)
+    display_rect = pg.Rect(
+        position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
+    )
 
     if display_rect.left < 0:
-        mask = pg.Rect(0, 0, - display_rect.left, HEIGHT)
+        mask = pg.Rect(0, 0, -display_rect.left, HEIGHT)
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
     if display_rect.top < 0:
-        mask = pg.Rect(0, 0, WIDTH, - display_rect.top)
+        mask = pg.Rect(0, 0, WIDTH, -display_rect.top)
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
     if display_rect.right >= M_WIDTH:
@@ -103,6 +112,7 @@ def draw_overmap(screen, position):
     if display_rect.bottom >= M_HEIGHT:
         mask = pg.Rect(0, M_HEIGHT - display_rect.bottom + HEIGHT, WIDTH, HEIGHT)
         pg.draw.rect(screen, OVERMAP_BG, mask)
+
 
 def main():
     clock = pg.time.Clock()
@@ -122,7 +132,7 @@ def main():
     done = False
     while not done:
         # FPS
-        clock.tick(60) 
+        clock.tick(60)
 
         # On trouve la nouvelle direction/position
         new_direction = V2(pg.mouse.get_pos()) - V2(SCREEN_CENTER)
@@ -138,20 +148,15 @@ def main():
         # On s'assure que la position ne sorte pas de la map
         position.x = clamp(position.x, 0, M_WIDTH)
         position.y = clamp(position.y, 0, M_HEIGHT)
-    
+
         draw_background(screen)
         draw_map(screen, position)
         draw_overmap(screen, position)
         draw_blob(screen, color=color)
-        
-        #draw_fruit(screen, positionf=position , color=color)
 
-        
+        # draw_fruit(screen, positionf=position , color=color)
 
         pg.display.update()
-
-
-
 
         # on itère sur tous les évênements qui ont eu lieu depuis le précédent appel
         # ici donc tous les évènements survenus durant la seconde précédente
@@ -164,7 +169,7 @@ def main():
             elif event.type == pg.KEYDOWN:
                 if event.key == pg.K_s:
                     take_screenshot(screen)
-                    #fichier_text()
+                    # fichier_text()
                 # si la touche est "Q" ou "escape" on veut quitter le programme
                 if event.key == pg.K_q or event.key == pg.K_ESCAPE:
                     done = True
