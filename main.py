@@ -26,19 +26,25 @@ MAX_SPEED = 100
 def round_to(n, div):
     return floor(n / div) * div
 
+
 def clamp(value, min_value, max_value):
     return min(max_value, max(value, min_value))
 
+
 def generate_random_color():
     return random.randrange(255), random.randrange(255), random.randrange(255)
+
 
 # Drawing functions
 def draw_background(screen):
     full_screen = pg.Rect(0, 0, WIDTH, HEIGHT)
     pg.draw.rect(screen, BACKGROUND_COLOR, full_screen)
 
+
 def draw_map(screen, position, tile_size=TILE_SIZE):
-    display_rect = pg.Rect(position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT)
+    display_rect = pg.Rect(
+        position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
+    )
 
     first_square_left = int(max(0, round_to(display_rect.left, tile_size)))
     first_square_top = int(max(0, round_to(display_rect.top, tile_size)))
@@ -60,31 +66,59 @@ def draw_map(screen, position, tile_size=TILE_SIZE):
         pg.draw.line(screen, BOARD_COLOR, (0, pos_j), (WIDTH, pos_j))
 
 
-def draw_blob(screen, size=20, color=None,skin=1, color_alea='White'):
+def draw_blob(screen, size=20, color=None, skin=1, color_alea="White"):
     x, y = SCREEN_CENTER
-    if skin == 1 :
+    if skin == 1:
         pg.draw.circle(screen, color, (x, y), size)
-    if skin == 2 :
+    if skin == 2:
         pg.draw.circle(screen, color_alea, (x, y), size)
-        pg.draw.circle(screen, color, (x, y), size-3)
-    elif skin == 3 :
+        pg.draw.circle(screen, color, (x, y), size - 3)
+    elif skin == 3:
         pg.draw.circle(screen, color_alea, (x, y), size)
-        pg.draw.circle(screen, color, (x, y), size-3)
-        pg.draw.aalines(screen, color_alea, True, points=[(x-9,y-11),(x+11,y+9),(x+9,y+11),(x-11,y-9),(x-9,y-11)])
-        pg.draw.aalines(screen, color_alea, True, points=[(x-10,y-10),(x+10,y+10)])
-        pg.draw.aalines(screen, color_alea, True, points=[(x-11,y+9),(x+9,y-11),(x+11,y-9),(x-9,y+11),(x-11,y+9)])
-        pg.draw.aalines(screen, color_alea, True, points=[(x-10,y+10),(x+10,y-10)])
+        pg.draw.circle(screen, color, (x, y), size - 3)
+        pg.draw.aalines(
+            screen,
+            color_alea,
+            True,
+            points=[
+                (x - 9, y - 11),
+                (x + 11, y + 9),
+                (x + 9, y + 11),
+                (x - 11, y - 9),
+                (x - 9, y - 11),
+            ],
+        )
+        pg.draw.aalines(
+            screen, color_alea, True, points=[(x - 10, y - 10), (x + 10, y + 10)]
+        )
+        pg.draw.aalines(
+            screen,
+            color_alea,
+            True,
+            points=[
+                (x - 11, y + 9),
+                (x + 9, y - 11),
+                (x + 11, y - 9),
+                (x - 9, y + 11),
+                (x - 11, y + 9),
+            ],
+        )
+        pg.draw.aalines(
+            screen, color_alea, True, points=[(x - 10, y + 10), (x + 10, y - 10)]
+        )
 
 
 def draw_overmap(screen, position):
-    display_rect = pg.Rect(position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT)
+    display_rect = pg.Rect(
+        position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
+    )
 
     if display_rect.left < 0:
-        mask = pg.Rect(0, 0, - display_rect.left, HEIGHT)
+        mask = pg.Rect(0, 0, -display_rect.left, HEIGHT)
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
     if display_rect.top < 0:
-        mask = pg.Rect(0, 0, WIDTH, - display_rect.top)
+        mask = pg.Rect(0, 0, WIDTH, -display_rect.top)
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
     if display_rect.right >= M_WIDTH:
@@ -97,9 +131,9 @@ def draw_overmap(screen, position):
 
 
 def main():
-    print('Veuillez choisir votre couleur :')
+    print("Veuillez choisir votre couleur :")
     couleur_choisie = input()
-    print('Veuillez choisir votre skin (entre 1 et 3):')
+    print("Veuillez choisir votre skin (entre 1 et 3):")
     skin = int(input())
     clock = pg.time.Clock()
 
@@ -118,7 +152,7 @@ def main():
     done = False
     while not done:
         # FPS
-        clock.tick(60) 
+        clock.tick(60)
 
         # On trouve la nouvelle direction/position
         new_direction = V2(pg.mouse.get_pos()) - V2(SCREEN_CENTER)
