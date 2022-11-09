@@ -108,6 +108,7 @@ def draw_blob(screen, size=20, color=None, skin=1, color_alea="White"):
         )
 
 
+
 def draw_overmap(screen, position):
     display_rect = pg.Rect(
         position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
