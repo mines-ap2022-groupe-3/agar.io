@@ -39,8 +39,15 @@ Vous êtes responsable de vos changements et pas `black` qui n'est qu'un outil p
 
 Pour les plus courageux, il est possible (mais pas toujours recommender) de lancer `black` avec une configuration spécifique (voir documentation).
 
+## On push
+
+On pousse le code est on créer une PR.
+
 ## Next steps
+
+Afin de pérenniser le style/format, on peut adopter les stratégies suivantes:
 
 * Configurer vs-code pour qu'il formate automatiquement le code python lorsqu'on sauvegarde un fichier.
 * Configurer les hooks git. (voir [pre-commit](https://pre-commit.com/)).
 * Configurer les actions github pour qu'elles vérifient le style du code python => chercher sur google "github actions black".
+* On merge et/ou rebase la PR faite à la maison sur cette PR. En profiter pour fixer les conflits + problème de style.
