@@ -26,19 +26,25 @@ MAX_SPEED = 100
 def round_to(n, div):
     return floor(n / div) * div
 
+
 def clamp(value, min_value, max_value):
     return min(max_value, max(value, min_value))
 
+
 def generate_random_color():
     return random.randrange(255), random.randrange(255), random.randrange(255)
+
 
 # Drawing functions
 def draw_background(screen):
     full_screen = pg.Rect(0, 0, WIDTH, HEIGHT)
     pg.draw.rect(screen, BACKGROUND_COLOR, full_screen)
 
+
 def draw_map(screen, position, tile_size=TILE_SIZE):
-    display_rect = pg.Rect(position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT)
+    display_rect = pg.Rect(
+        position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
+    )
 
     first_square_left = int(max(0, round_to(display_rect.left, tile_size)))
     first_square_top = int(max(0, round_to(display_rect.top, tile_size)))
@@ -64,15 +70,18 @@ def draw_blob(screen, size, color=None):
     x, y = SCREEN_CENTER
     pg.draw.circle(screen, color, (x, y), size)
 
+
 def draw_overmap(screen, position):
-    display_rect = pg.Rect(position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT)
+    display_rect = pg.Rect(
+        position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
+    )
 
     if display_rect.left < 0:
-        mask = pg.Rect(0, 0, - display_rect.left, HEIGHT)
+        mask = pg.Rect(0, 0, -display_rect.left, HEIGHT)
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
     if display_rect.top < 0:
-        mask = pg.Rect(0, 0, WIDTH, - display_rect.top)
+        mask = pg.Rect(0, 0, WIDTH, -display_rect.top)
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
     if display_rect.right >= M_WIDTH:
@@ -83,14 +92,20 @@ def draw_overmap(screen, position):
         mask = pg.Rect(0, M_HEIGHT - display_rect.bottom + HEIGHT, WIDTH, HEIGHT)
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
-#génération fruit
+
+# génération fruit
 pos_fruits = []
 col_fruits = []
 
 
 def inside_map(pos_fruit):
     """test si le fruit généré est dans la map"""
-    return pos_fruit.x - WIDTH/2>0 and pos_fruit.x - WIDTH/2<M_WIDTH and pos_fruit.y - HEIGHT/2>0 and pos_fruit.y - HEIGHT/2<M_HEIGHT
+    return (
+        pos_fruit.x - WIDTH / 2 > 0
+        and pos_fruit.x - WIDTH / 2 < M_WIDTH
+        and pos_fruit.y - HEIGHT / 2 > 0
+        and pos_fruit.y - HEIGHT / 2 < M_HEIGHT
+    )
 
 
 def generate_random_fruit_position(position):
@@ -100,18 +115,22 @@ def generate_random_fruit_position(position):
         py = int(position.y)
         x, y = random.randint(px, px + WIDTH), random.randint(py, py + HEIGHT)
         pos_fruit = V2(x, y)
-        if inside_map(pos_fruit): break
+        if inside_map(pos_fruit):
+            break
 
     pos_fruits.append(pos_fruit)
 
+
 def generate_fruit(pos_fruits, position):
     """génère un fruit aléatoirement sur le screen"""
-    if pos_fruits == [] or (random.random()>0.99 and len(pos_fruits)<20):
+    if pos_fruits == [] or (random.random() > 0.99 and len(pos_fruits) < 20):
         generate_random_fruit_position(position)
         color = generate_random_color()
         col_fruits.append(color)
 
-#affichage fruits
+
+# affichage fruits
+
 
 def draw_fruits(screen, position, pos_fruits, col_fruits):
     """affiche les fruits"""
@@ -122,12 +141,14 @@ def draw_fruits(screen, position, pos_fruits, col_fruits):
 
         pg.draw.circle(screen, color, center, 10)
 
-#Manger fruit
+
+# Manger fruit
+
 
 def eat_fruit(position, pos_fruits, size):
     """si le fruit est assez proche, le mange. Renvoie la nouvelle taille après absorbation d'un ou plusieurs fruits"""
     for pos_fruit in pos_fruits:
-        if (position+SCREEN//2-pos_fruit).length() < size:
+        if (position + SCREEN // 2 - pos_fruit).length() < size:
             i = pos_fruits.index(pos_fruit)
             del pos_fruits[i]
             del col_fruits[i]
@@ -145,8 +166,7 @@ def main():
     # On donne un titre à la fenetre
     pg.display.set_caption("agario")
 
-    
-    BLOB_SIZE = 20
+    blob_size = 20
     color = generate_random_color()
     speed = 4
     position = V2(MAP) / 2
@@ -155,7 +175,7 @@ def main():
     done = False
     while not done:
         # FPS
-        clock.tick(60) 
+        clock.tick(60)
 
         # On trouve la nouvelle direction/position
         new_direction = V2(pg.mouse.get_pos()) - V2(SCREEN_CENTER)
@@ -177,9 +197,9 @@ def main():
         draw_overmap(screen, position)
 
         generate_fruit(pos_fruits, position)
-        BLOB_SIZE = eat_fruit(position, pos_fruits, size = BLOB_SIZE)
+        blob_size = eat_fruit(position, pos_fruits, size=blob_size)
         draw_fruits(screen, position, pos_fruits, col_fruits)
-        draw_blob(screen, size = BLOB_SIZE, color=color)
+        draw_blob(screen, size=blob_size, color=color)
 
         pg.display.update()
 
