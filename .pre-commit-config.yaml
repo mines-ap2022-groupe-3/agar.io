@@ -9,3 +9,5 @@ repos:
     rev: 22.3.0
     hooks:
     -   id: black
+- name: Run black formatter
+  uses: rickstaa/action-black@v1.1.14
