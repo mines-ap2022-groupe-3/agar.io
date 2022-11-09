@@ -148,8 +148,6 @@ def main():
         pseudo = pseudo_font.render(f'{user_name}', True, COLORS["white"])
         screen.blit(pseudo, SCREEN_CENTER - V2(20,15))
 
-        menu_pause.disable()
-
         # on itère sur tous les évênements qui ont eu lieu depuis le précédent appel
         # ici donc tous les évènements survenus durant la seconde précédente
         for event in pg.event.get():
