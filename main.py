@@ -13,9 +13,15 @@ BOARD_COLOR = COLORS["grey"]
 BACKGROUND_COLOR = COLORS["black"]
 COLOR_BLOP = COLORS["green"]
 
-PLAYER_NAME = 'Player'
+PLAYER_NAME = "Player"
 
-INDEX = [('Black','black'), ('White','white'), ('Blue','blue'), ('Red', 'red'), ('Green', 'green')]
+INDEX = [
+    ("Black", "black"),
+    ("White", "white"),
+    ("Blue", "blue"),
+    ("Red", "red"),
+    ("Green", "green"),
+]
 
 SCREEN = V2(1200, 800)
 WIDTH, HEIGHT = SCREEN
@@ -32,19 +38,25 @@ MAX_SPEED = 100
 def round_to(n, div):
     return floor(n / div) * div
 
+
 def clamp(value, min_value, max_value):
     return min(max_value, max(value, min_value))
 
+
 def generate_random_color():
     return random.randrange(255), random.randrange(255), random.randrange(255)
+
 
 # Drawing functions
 def draw_background(screen):
     full_screen = pg.Rect(0, 0, WIDTH, HEIGHT)
     pg.draw.rect(screen, BACKGROUND_COLOR, full_screen)
 
+
 def draw_map(screen, position, tile_size=TILE_SIZE):
-    display_rect = pg.Rect(position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT)
+    display_rect = pg.Rect(
+        position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
+    )
 
     first_square_left = int(max(0, round_to(display_rect.left, tile_size)))
     first_square_top = int(max(0, round_to(display_rect.top, tile_size)))
@@ -65,19 +77,23 @@ def draw_map(screen, position, tile_size=TILE_SIZE):
         pos_j = j - display_rect.y
         pg.draw.line(screen, BOARD_COLOR, (0, pos_j), (WIDTH, pos_j))
 
+
 def draw_blob(screen, size=20, color=None):
     x, y = SCREEN_CENTER
     pg.draw.circle(screen, color, (x, y), size)
 
+
 def draw_overmap(screen, position):
-    display_rect = pg.Rect(position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT)
+    display_rect = pg.Rect(
+        position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
+    )
 
     if display_rect.left < 0:
-        mask = pg.Rect(0, 0, - display_rect.left, HEIGHT)
+        mask = pg.Rect(0, 0, -display_rect.left, HEIGHT)
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
     if display_rect.top < 0:
-        mask = pg.Rect(0, 0, WIDTH, - display_rect.top)
+        mask = pg.Rect(0, 0, WIDTH, -display_rect.top)
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
     if display_rect.right >= M_WIDTH:
@@ -88,28 +104,33 @@ def draw_overmap(screen, position):
         mask = pg.Rect(0, M_HEIGHT - display_rect.bottom + HEIGHT, WIDTH, HEIGHT)
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
-def change_color_background(index,color):
+
+def change_color_background(index, color):
     """Permet de changer la couleur du fond d'écran à partir du menu"""
-    global BACKGROUND_COLOR 
+    global BACKGROUND_COLOR
     BACKGROUND_COLOR = COLORS[color]
+
 
 def change_color_blop(index, color):
     """Permet de changer la couleur du blop à partir du menu"""
-    global COLOR_BLOP 
+    global COLOR_BLOP
     COLOR_BLOP = COLORS[color]
+
 
 def get_player_name(name):
     """Permet de récupérer le nom du joueur à partir du menu"""
     global PLAYER_NAME
     PLAYER_NAME = name
 
-def PAUSE_MENU(pauseMenu,screen):
+
+def PAUSE_MENU(pauseMenu, screen):
     """Pour faire tourner le menu pause"""
-    while pauseMenu.is_enabled() : 
+    while pauseMenu.is_enabled():
         events = pg.event.get()
         pauseMenu.draw(screen)
         pauseMenu.update(events)
         pg.display.update()
+
 
 def main():
     clock = pg.time.Clock()
@@ -121,27 +142,29 @@ def main():
     # On donne un titre à la fenetre
     pg.display.set_caption("agario")
 
-    # Création du menu de pause et initialisation des différents éléments 
-    pauseMenu = pg_menu.Menu('Pause',WIDTH/2, HEIGHT/2,theme=pg_menu.themes.THEME_BLUE)
-    pauseMenu.add.text_input('Name : ', default='Player', onchange = get_player_name)
-    pauseMenu.add.selector('Couleur du fond : ', INDEX, onchange=change_color_background)
-    pauseMenu.add.selector('Couleur du blop : ', INDEX, onchange=change_color_blop)
-    pauseMenu.add.button('Continuer', pauseMenu.disable)
-    pauseMenu.add.button('Recommencer', main)
-    pauseMenu.add.button('Quitter',pg_menu.events.EXIT)
-    pauseMenu.disable() # par défault on n'affiche pas le menu 
+    # Création du menu de pause et initialisation des différents éléments
+    pauseMenu = pg_menu.Menu(
+        "Pause", WIDTH / 2, HEIGHT / 2, theme=pg_menu.themes.THEME_BLUE
+    )
+    pauseMenu.add.text_input("Name : ", default="Player", onchange=get_player_name)
+    pauseMenu.add.selector(
+        "Couleur du fond : ", INDEX, onchange=change_color_background
+    )
+    pauseMenu.add.selector("Couleur du blop : ", INDEX, onchange=change_color_blop)
+    pauseMenu.add.button("Continuer", pauseMenu.disable)
+    pauseMenu.add.button("Recommencer", main)
+    pauseMenu.add.button("Quitter", pg_menu.events.EXIT)
+    pauseMenu.disable()  # par défault on n'affiche pas le menu
 
     speed = 4
     position = V2(MAP) / 2
-
-
 
     # La boucle du jeu
     done = False
     while not done:
         # FPS
-        clock.tick(60) 
-        
+        clock.tick(60)
+
         # Je commence par regarder si je dois afficher le menu
         if pauseMenu.is_enabled():
             PAUSE_MENU(pauseMenu, screen)
@@ -155,7 +178,9 @@ def main():
 
         position += new_direction * speed
 
-        pg.display.set_caption(f"agario - {position.x=:5.0f} - {position.y=:5.0f} - Partie de {PLAYER_NAME}")
+        pg.display.set_caption(
+            f"agario - {position.x=:5.0f} - {position.y=:5.0f} - Partie de {PLAYER_NAME}"
+        )
 
         # On s'assure que la position ne sorte pas de la map
         position.x = clamp(position.x, 0, M_WIDTH)
@@ -180,8 +205,8 @@ def main():
                 # si la touche est "Q" ou "escape" on veut quitter le programme
                 if event.key == pg.K_q or event.key == pg.K_ESCAPE:
                     done = True
-                if event.key == pg.K_p : 
-                    #Si la touche "p" est appuyée on rentre dans le menu Pause
+                if event.key == pg.K_p:
+                    # Si la touche "p" est appuyée on rentre dans le menu Pause
                     pauseMenu.enable()
     pg.quit()
 
