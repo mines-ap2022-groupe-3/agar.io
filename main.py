@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import random
-from math import floor,sqrt
+from math import floor, sqrt
 
 import pygame as pg
 from pygame.color import THECOLORS as COLORS
@@ -21,7 +21,6 @@ MAP = 2 * SCREEN
 M_WIDTH, M_HEIGHT = MAP
 
 MAX_SPEED = 100
-
 
 
 # Utilities
@@ -94,12 +93,15 @@ def draw_overmap(screen, position):
         mask = pg.Rect(0, M_HEIGHT - display_rect.bottom + HEIGHT, WIDTH, HEIGHT)
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
+
 def random_position_generator():
-    return random.randint(0,HEIGHT), random.randint(0,WIDTH)
+    return random.randint(0, HEIGHT), random.randint(0, WIDTH)
+
 
 def draw_fruit(screen, position, size=5, color=None):
-    x,y = position
+    x, y = position
     pg.draw.circle(screen, color, (x, y), size)
+
 
 def main():
     clock = pg.time.Clock()
@@ -133,7 +135,7 @@ def main():
 
         position += new_direction * speed
         pos_fruit -= new_direction * speed
-        
+
         pg.display.set_caption(f"agario - {position.x=:5.0f} - {position.y=:5.0f}")
 
         # On s'assure que la position ne sorte pas de la map
@@ -144,16 +146,21 @@ def main():
         draw_map(screen, position)
         draw_overmap(screen, position)
 
-        draw_fruit(screen, pos_fruit, color = color_fruit)
+        draw_fruit(screen, pos_fruit, color=color_fruit)
 
-        draw_blob(screen, size = blop_size, color=color)
+        draw_blob(screen, size=blop_size, color=color)
 
-        #manger le fruit 
-        if sqrt((pos_fruit[0]-SCREEN_CENTER[0])**2 + (pos_fruit[1]-SCREEN_CENTER[1])**2) <= blop_size:
+        # manger le fruit
+        if (
+            sqrt(
+                (pos_fruit[0] - SCREEN_CENTER[0]) ** 2
+                + (pos_fruit[1] - SCREEN_CENTER[1]) ** 2
+            )
+            <= blop_size
+        ):
             blop_size += 5
             pos_fruit = random_position_generator()
             color_fruit = generate_random_color()
-
 
         pg.display.update()
 
