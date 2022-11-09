@@ -103,7 +103,7 @@ def menu(screen):
     menu.add.text_input("Name :", default="Blop")
     menu.add.button("Black", change_color_back("black"))
     menu.add.button("White", change_color_back("white"))
-    menu.add.button("Blue", change_color_back("blue"))
+    menu.add.button("Red", change_color_back("red"))
     menu.add.button("Green", change_color_back("green"))
     menu.add.button("Resume", pg_menu.events.CLOSE)
     menu.add.button("Quit", pg_menu.events.EXIT)
