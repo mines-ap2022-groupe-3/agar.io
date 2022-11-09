@@ -39,12 +39,15 @@ def round_to(n, div):
     return floor(n / div) * div
 
 
+
 def clamp(value, min_value, max_value):
     return min(max_value, max(value, min_value))
 
 
+
 def generate_random_color():
     return random.randrange(255), random.randrange(255), random.randrange(255)
+
 
 
 # Drawing functions
@@ -53,9 +56,12 @@ def draw_background(screen):
     pg.draw.rect(screen, BACKGROUND_COLOR, full_screen)
 
 
+
 def draw_map(screen, position, tile_size=TILE_SIZE):
     display_rect = pg.Rect(
+        
         position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
+    
     )
 
     first_square_left = int(max(0, round_to(display_rect.left, tile_size)))
@@ -83,9 +89,12 @@ def draw_blob(screen, size=20, color=None):
     pg.draw.circle(screen, color, (x, y), size)
 
 
+
 def draw_overmap(screen, position):
     display_rect = pg.Rect(
+        
         position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
+    
     )
 
     if display_rect.left < 0:
