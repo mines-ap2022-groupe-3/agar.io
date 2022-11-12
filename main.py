@@ -6,6 +6,7 @@ from math import floor
 import pygame as pg
 from pygame.color import THECOLORS as COLORS
 from pygame.math import Vector2 as V2
+from collections import namedtuple
 
 OVERMAP_BG = COLORS["white"]
 BOARD_COLOR = COLORS["grey"]
@@ -21,6 +22,9 @@ MAP = 2 * SCREEN
 M_WIDTH, M_HEIGHT = MAP
 
 MAX_SPEED = 100
+PROBA_APPARITION_FRUIT = 0.05
+NB_MAX_FRUIT = 40
+BLOB_SIZE_IN = 20
 
 # Utilities
 def round_to(n, div):
@@ -94,64 +98,46 @@ def draw_overmap(screen, position):
 
 
 # génération fruit
-pos_fruits = []
-col_fruits = []
+Fruit = namedtuple("Fruit", ["xy", "color"])
+LIST_FRUITS = []
 
 
-def inside_map(pos_fruit):
-    """test si le fruit généré est dans la map"""
-    return (
-        pos_fruit.x - WIDTH / 2 > 0
-        and pos_fruit.x - WIDTH / 2 < M_WIDTH
-        and pos_fruit.y - HEIGHT / 2 > 0
-        and pos_fruit.y - HEIGHT / 2 < M_HEIGHT
-    )
-
-
-def generate_random_fruit_position(position):
+def generate_random_fruit_position():
     """génère une position aléatoire"""
-    while True:
-        px = int(position.x)
-        py = int(position.y)
-        x, y = random.randint(px, px + WIDTH), random.randint(py, py + HEIGHT)
-        pos_fruit = V2(x, y)
-        if inside_map(pos_fruit):
-            break
-
-    pos_fruits.append(pos_fruit)
+    x, y = random.randint(WIDTH // 2, M_WIDTH + WIDTH // 2), random.randint(
+        HEIGHT // 2, M_HEIGHT + HEIGHT // 2
+    )
+    return V2(x, y)
 
 
-def generate_fruit(pos_fruits, position):
+def generate_fruit():
     """génère un fruit aléatoirement sur le screen"""
-    if pos_fruits == [] or (random.random() > 0.99 and len(pos_fruits) < 20):
-        generate_random_fruit_position(position)
+    if len(LIST_FRUITS) == 0 or (
+        random.random() < PROBA_APPARITION_FRUIT and len(LIST_FRUITS) < NB_MAX_FRUIT
+    ):
+        xy = generate_random_fruit_position()
         color = generate_random_color()
-        col_fruits.append(color)
+        LIST_FRUITS.append(Fruit(xy, color))
 
 
 # affichage fruits
 
 
-def draw_fruits(screen, position, pos_fruits, col_fruits):
+def draw_fruits(screen, position):
     """affiche les fruits"""
-    for pos_fruit, color in zip(pos_fruits, col_fruits):
-        centerx = pos_fruit.x - position.x
-        centery = pos_fruit.y - position.y
-        center = (centerx, centery)
-
-        pg.draw.circle(screen, color, center, 10)
+    for f in LIST_FRUITS:
+        center = f.xy - position
+        pg.draw.circle(screen, f.color, center, 10)
 
 
 # Manger fruit
 
 
-def eat_fruit(position, pos_fruits, size) -> int:
+def eat_fruit(position, size) -> int:
     """si le fruit est assez proche, le mange. Renvoie la nouvelle taille après absorbation d'un ou plusieurs fruits"""
-    for pos_fruit in pos_fruits:
-        if (position + SCREEN // 2 - pos_fruit).length() < size:
-            i = pos_fruits.index(pos_fruit)
-            del pos_fruits[i]
-            del col_fruits[i]
+    for f in LIST_FRUITS:
+        if (position + SCREEN // 2 - f.xy).length() < size:
+            del LIST_FRUITS[LIST_FRUITS.index(f)]
             size += 5
     return size
 
@@ -166,7 +152,7 @@ def main():
     # On donne un titre à la fenetre
     pg.display.set_caption("agario")
 
-    blob_size = 20
+    blob_size = BLOB_SIZE_IN
     color = generate_random_color()
     speed = 4
     position = V2(MAP) / 2
@@ -196,9 +182,9 @@ def main():
         draw_map(screen, position)
         draw_overmap(screen, position)
 
-        generate_fruit(pos_fruits, position)
-        blob_size = eat_fruit(position, pos_fruits, size=blob_size)
-        draw_fruits(screen, position, pos_fruits, col_fruits)
+        generate_fruit()
+        blob_size = eat_fruit(position, size=blob_size)
+        draw_fruits(screen, position)
         draw_blob(screen, size=blob_size, color=color)
 
         pg.display.update()
