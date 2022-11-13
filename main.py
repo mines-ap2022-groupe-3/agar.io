@@ -22,8 +22,12 @@ MAP = 2 * SCREEN
 M_WIDTH, M_HEIGHT = MAP
 
 MAX_SPEED = 100
+
 PROBA_APPARITION_FRUIT = 0.05
 NB_MAX_FRUIT = 40
+RAYON_FRUIT_MIN = 5
+RAYON_FRUIT_MAX = 12
+
 BLOB_SIZE_IN = 20
 
 # Utilities
@@ -98,7 +102,7 @@ def draw_overmap(screen, position):
 
 
 # génération fruit
-Fruit = namedtuple("Fruit", ["xy", "color"])
+Fruit = namedtuple("Fruit", ["xy", "color", "radius"])
 LIST_FRUITS = []
 
 
@@ -110,6 +114,12 @@ def generate_random_fruit_position():
     return V2(x, y)
 
 
+def generate_random_fruit_radius():
+    """génère un rayon aléatoire entre RAYON_FRUIT_MIN et RAYON_FRUIT_MAX"""
+    r = random.randint(RAYON_FRUIT_MIN, RAYON_FRUIT_MAX)
+    return r
+
+
 def generate_fruit():
     """génère un fruit aléatoirement sur le screen"""
     if len(LIST_FRUITS) == 0 or (
@@ -117,7 +127,8 @@ def generate_fruit():
     ):
         xy = generate_random_fruit_position()
         color = generate_random_color()
-        LIST_FRUITS.append(Fruit(xy, color))
+        radius = generate_random_fruit_radius()
+        LIST_FRUITS.append(Fruit(xy, color, radius))
 
 
 # affichage fruits
@@ -127,7 +138,7 @@ def draw_fruits(screen, position):
     """affiche les fruits"""
     for f in LIST_FRUITS:
         center = f.xy - position
-        pg.draw.circle(screen, f.color, center, 10)
+        pg.draw.circle(screen, f.color, center, f.radius)
 
 
 # Manger fruit
@@ -137,8 +148,9 @@ def eat_fruit(position, size) -> int:
     """si le fruit est assez proche, le mange. Renvoie la nouvelle taille après absorbation d'un ou plusieurs fruits"""
     for f in LIST_FRUITS:
         if (position + SCREEN // 2 - f.xy).length() < size:
+            # formule pour ajouter à l'air du blob l'air du fruit
+            size = (size**3 + f.radius**3) ** (1 / 3)
             del LIST_FRUITS[LIST_FRUITS.index(f)]
-            size += 5
     return size
 
 
