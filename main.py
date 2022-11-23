@@ -108,9 +108,7 @@ LIST_FRUITS = []
 
 def generate_random_fruit_position():
     """génère une position aléatoire"""
-    x, y = random.randint(WIDTH // 2, M_WIDTH + WIDTH // 2), random.randint(
-        HEIGHT // 2, M_HEIGHT + HEIGHT // 2
-    )
+    x, y = random.randint(0, M_WIDTH), random.randint(0, M_HEIGHT)
     return V2(x, y)
 
 
@@ -137,7 +135,7 @@ def generate_fruit():
 def draw_fruits(screen, position):
     """affiche les fruits"""
     for f in LIST_FRUITS:
-        center = f.xy - position
+        center = f.xy - position + SCREEN_CENTER
         pg.draw.circle(screen, f.color, center, f.radius)
 
 
@@ -147,7 +145,7 @@ def draw_fruits(screen, position):
 def eat_fruit(position, size) -> int:
     """si le fruit est assez proche, le mange. Renvoie la nouvelle taille après absorbation d'un ou plusieurs fruits"""
     for f in LIST_FRUITS:
-        if (position + SCREEN // 2 - f.xy).length() < size:
+        if (position - f.xy).length() < size:
             # formule pour ajouter à l'air du blob l'air du fruit
             size = (size**3 + f.radius**3) ** (1 / 3)
             del LIST_FRUITS[LIST_FRUITS.index(f)]
