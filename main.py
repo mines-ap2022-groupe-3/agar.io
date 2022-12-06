@@ -22,6 +22,7 @@ M_WIDTH, M_HEIGHT = MAP
 
 MAX_SPEED = 100
 
+FRUITS_NUMBER = 20
 
 # Utilities
 def round_to(n, div):
@@ -94,13 +95,13 @@ def draw_overmap(screen, position):
         pg.draw.rect(screen, OVERMAP_BG, mask)
 
 
-def random_position_generator():
+def generate_random_position():
     return random.randint(0, HEIGHT), random.randint(0, WIDTH)
 
 
 def draw_fruit(screen, position, size=5, color=None):
     x, y = position
-    pg.draw.circle(screen, color, (x, y), size)
+    pg.draw.circle(screen, color, position, size)
 
 
 def main():
@@ -116,8 +117,12 @@ def main():
     color = generate_random_color()
     speed = 4
     position = V2(MAP) / 2
-    pos_fruit = random_position_generator()
-    color_fruit = generate_random_color()
+    pos_fruit = []
+    color_fruit = []
+    for i in range(FRUITS_NUMBER):
+        pos_fruit.append(generate_random_position())
+        color_fruit.append(generate_random_color())
+
     blop_size = 20
 
     # La boucle du jeu
@@ -134,7 +139,8 @@ def main():
             new_direction = new_direction / MAX_SPEED
 
         position += new_direction * speed
-        pos_fruit -= new_direction * speed
+        for i in range(FRUITS_NUMBER):
+            pos_fruit[i] -= new_direction * speed
 
         pg.display.set_caption(f"agario - {position.x=:5.0f} - {position.y=:5.0f}")
 
@@ -146,21 +152,23 @@ def main():
         draw_map(screen, position)
         draw_overmap(screen, position)
 
-        draw_fruit(screen, pos_fruit, color=color_fruit)
+        for i in range(FRUITS_NUMBER):
+            draw_fruit(screen, pos_fruit[i], color=color_fruit[i])
 
         draw_blob(screen, size=blop_size, color=color)
 
         # manger le fruit
-        if (
-            sqrt(
-                (pos_fruit[0] - SCREEN_CENTER[0]) ** 2
-                + (pos_fruit[1] - SCREEN_CENTER[1]) ** 2
-            )
-            <= blop_size
-        ):
-            blop_size += 5
-            pos_fruit = random_position_generator()
-            color_fruit = generate_random_color()
+        for i in range(FRUITS_NUMBER):
+            if (
+                sqrt(
+                    (pos_fruit[i][0] - SCREEN_CENTER[0]) ** 2
+                    + (pos_fruit[i][1] - SCREEN_CENTER[1]) ** 2
+                )
+                <= blop_size
+            ):
+                blop_size += 5
+                pos_fruit[i] = generate_random_position()
+                color_fruit[i] = generate_random_color()
 
         pg.display.update()
 
