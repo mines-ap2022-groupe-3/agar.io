@@ -1,11 +1,10 @@
-#!/usr/bin/env python
-
 import pygame as pg
 from pygame.color import THECOLORS as COLORS
 from pygame.math import Vector2 as V2
 import utilities as ut
 
 
+# Global Variables
 OVERMAP_BG = COLORS["white"]
 BOARD_COLOR = COLORS["grey"]
 BACKGROUND_COLOR = COLORS["black"]

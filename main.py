@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
+# Utilities
 import pygame as pg
 from pygame.math import Vector2 as V2
-
-# Utilities
 import utilities as ut
 import screen as sc
 
