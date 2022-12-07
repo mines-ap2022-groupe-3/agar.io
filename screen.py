@@ -21,11 +21,13 @@ M_WIDTH, M_HEIGHT = MAP
 
 # Drawing functions
 def draw_background(screen):
+    """dessine le background en noir"""
     full_screen = pg.Rect(0, 0, WIDTH, HEIGHT)
     pg.draw.rect(screen, BACKGROUND_COLOR, full_screen)
 
 
 def draw_map(screen, position, tile_size=TILE_SIZE):
+    """dessine les carrés de la map"""
     display_rect = pg.Rect(
         position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
     )
@@ -51,11 +53,13 @@ def draw_map(screen, position, tile_size=TILE_SIZE):
 
 
 def draw_blob(screen, size, color=None):
+    """dessine un blob au centre de l'écran"""
     x, y = SCREEN_CENTER
     pg.draw.circle(screen, color, (x, y), size)
 
 
 def draw_overmap(screen, position):
+    """dessine l'overmap en blanc"""
     display_rect = pg.Rect(
         position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
     )
