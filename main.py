@@ -65,6 +65,8 @@ def main():
                 done = True
             # un type de pg.KEYDOWN signifie que l'on a appuyé une touche du clavier
             elif event.type == pg.KEYDOWN:
+                if event.key == pg.K_s:
+                    utilities.take_screenshot(screen)
                 # si la touche est "Q" ou "escape" on veut quitter le programme
                 if event.key == pg.K_q or event.key == pg.K_ESCAPE:
                     done = True
