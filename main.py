@@ -8,9 +8,6 @@ from pygame.color import THECOLORS as COLORS
 from pygame.math import Vector2 as V2
 from collections import namedtuple
 from screen import (
-    round_to,
-    clamp,
-    generate_random_color,
     draw_background,
     draw_map,
     draw_blob,
@@ -22,6 +19,8 @@ from screen import (
     draw_fruits,
     eat_fruit,
 )
+
+from utilities import clamp, round_to, generate_random_color
 
 OVERMAP_BG = COLORS["white"]
 BOARD_COLOR = COLORS["grey"]
