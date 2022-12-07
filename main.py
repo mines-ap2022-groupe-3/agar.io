@@ -1,13 +1,9 @@
 #!/usr/bin/env python
 
-from math import sqrt
-
 import pygame as pg
-from pygame.color import THECOLORS as COLORS
 from pygame.math import Vector2 as V2
 from utilities import generate_random_color, clamp, generate_random_position
 from draw import (
-    draw_fruit,
     draw_overmap,
     draw_map,
     draw_background,
@@ -20,9 +16,11 @@ from draw import (
     SCREEN_CENTER,
 )
 
-MAX_SPEED = 100
+from fruits import generate_fruit, eat_fruit, draw_fruits, FRUITS_NUMBER
 
-FRUITS_NUMBER = 20
+
+MAX_SPEED = 100
+BLOB_SIZE_IN = 20
 
 
 def main():
@@ -35,6 +33,7 @@ def main():
     # On donne un titre à la fenetre
     pg.display.set_caption("agario")
 
+    blob_size = BLOB_SIZE_IN
     color = generate_random_color()
     speed = 4
     position = V2(MAP) / 2
@@ -60,8 +59,8 @@ def main():
             new_direction = new_direction / MAX_SPEED
 
         position += new_direction * speed
-        for i in range(FRUITS_NUMBER):
-            pos_fruit[i] -= new_direction * speed
+        # for i in range(FRUITS_NUMBER):
+        # pos_fruit[i] -= new_direction * speed
 
         pg.display.set_caption(f"agario - {position.x=:5.0f} - {position.y=:5.0f}")
 
@@ -73,23 +72,12 @@ def main():
         draw_map(screen, position)
         draw_overmap(screen, position)
 
-        for i in range(FRUITS_NUMBER):
-            draw_fruit(screen, pos_fruit[i], color=color_fruit[i])
+        draw_blob(screen, color=color)
 
-        draw_blob(screen, size=blop_size, color=color)
-
-        # manger le fruit
-        for i in range(FRUITS_NUMBER):
-            if (
-                sqrt(
-                    (pos_fruit[i][0] - SCREEN_CENTER[0]) ** 2
-                    + (pos_fruit[i][1] - SCREEN_CENTER[1]) ** 2
-                )
-                <= blop_size
-            ):
-                blop_size += 5
-                pos_fruit[i] = generate_random_position()
-                color_fruit[i] = generate_random_color()
+        generate_fruit()
+        blob_size = eat_fruit(position, size=blob_size)
+        draw_fruits(screen, position)
+        draw_blob(screen, size=blob_size, color=color)
 
         pg.display.update()
 

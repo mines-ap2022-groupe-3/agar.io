@@ -74,8 +74,3 @@ def draw_overmap(screen, position):
     if display_rect.bottom >= M_HEIGHT:
         mask = pg.Rect(0, M_HEIGHT - display_rect.bottom + HEIGHT, WIDTH, HEIGHT)
         pg.draw.rect(screen, OVERMAP_BG, mask)
-
-
-def draw_fruit(screen, position, size=5, color=None):
-    x, y = position
-    pg.draw.circle(screen, color, position, size)
