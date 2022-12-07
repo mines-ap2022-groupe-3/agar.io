@@ -1,9 +1,9 @@
-import random 
+import random
 from pygame.math import Vector2 as V2
 from pygame.color import THECOLORS as COLORS
 import pygame as pg
-import utilities 
-import fruits 
+import utilities
+import fruits
 
 OVERMAP_BG = COLORS["white"]
 BOARD_COLOR = COLORS["grey"]
@@ -79,11 +79,13 @@ def draw_overmap(screen, position):
 
 # affichage fruits
 
+
 def draw_fruits(screen, position):
     """affiche les fruits"""
     for f in fruits.LIST_FRUITS:
         center = f.xy - position + SCREEN_CENTER
         pg.draw.circle(screen, f.color, center, f.radius)
+
 
 def generate_random_fruit_position():
     """génère une position aléatoire"""

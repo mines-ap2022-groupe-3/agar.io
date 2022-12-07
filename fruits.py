@@ -1,4 +1,4 @@
-import utilities as utls 
+import utilities as utls
 import random
 import screen
 from collections import namedtuple
@@ -19,6 +19,7 @@ def generate_random_fruit_radius():
     r = random.randint(RAYON_FRUIT_MIN, RAYON_FRUIT_MAX)
     return r
 
+
 def generate_fruit():
     """génère un fruit aléatoirement sur le screen"""
     if len(LIST_FRUITS) == 0 or (
@@ -31,6 +32,7 @@ def generate_fruit():
 
 
 # Manger fruit
+
 
 def eat_fruit(position, size) -> int:
     """si le fruit est assez proche, le mange. Renvoie la nouvelle taille après absorbation d'un ou plusieurs fruits"""

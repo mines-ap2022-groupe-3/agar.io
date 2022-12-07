@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 
-import fruits 
-import utilities as utls 
-import screen as sc 
-import pygame as pg 
+import fruits
+import utilities as utls
+import screen as sc
+import pygame as pg
 from pygame.math import Vector2 as V2
 
 MAX_SPEED = 100
 
 BLOB_SIZE_IN = 20
+
 
 def main():
     clock = pg.time.Clock()
