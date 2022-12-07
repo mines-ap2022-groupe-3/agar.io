@@ -9,6 +9,7 @@ from pygame.math import Vector2 as V2
 
 def main():
     clock = pg.time.Clock()
+    time = 0
 
     # on initialise pygame et on crée une fenêtre de 800x800 pixels
     pg.init()
@@ -68,6 +69,13 @@ def main():
                 # si la touche est "Q" ou "escape" on veut quitter le programme
                 if event.key == pg.K_q or event.key == pg.K_ESCAPE:
                     done = True
+            # condition de victoire
+            if blob_size == 50:
+                done = True
+            # condition de défaite
+            if time == 600:
+                done = True
+        time += 1
 
     pg.quit()
 
@@ -75,4 +83,4 @@ def main():
 # if python says run, then we should run
 if __name__ == "__main__":
     main()
-    # print(round_to(105, 19))
+    # help("pygame_menu.add.button")
