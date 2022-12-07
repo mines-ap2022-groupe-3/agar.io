@@ -44,18 +44,6 @@ def take_screenshot(screen):
     myscreen.save("myscreen.jpg")
 
 
-def fichier_text():
-    f = open("map.txt", "w")
-    im = plt.imread("myscreen.jpg")
-    for i in range(len(im)):
-        for j in range(len(im[0])):
-            if im[i][j] == BACKGROUND_COLOR or im[i][j] == BOARD_COLOR:
-                f.write(" ")
-            else:
-                f.write("o")
-        f.write("\n")
-
-
 # Drawing functions
 def draw_background(screen):
     full_screen = pg.Rect(0, 0, WIDTH, HEIGHT)
@@ -167,7 +155,6 @@ def main():
             elif event.type == pg.KEYDOWN:
                 if event.key == pg.K_s:
                     take_screenshot(screen)
-                    fichier_text()
                 # si la touche est "Q" ou "escape" on veut quitter le programme
                 if event.key == pg.K_q or event.key == pg.K_ESCAPE:
                     done = True
