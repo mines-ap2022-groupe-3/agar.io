@@ -15,9 +15,6 @@ import utilities as utils
 import screen as s
 
 
-
-
-
 def main():
     clock = pg.time.Clock()
 

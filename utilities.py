@@ -10,6 +10,8 @@ import pyautogui
 import matplotlib.pyplot as plt
 
 import screen as s
+
+
 def round_to(n, div):
     return floor(n / div) * div
 
