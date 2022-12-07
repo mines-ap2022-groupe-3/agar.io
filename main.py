@@ -35,6 +35,21 @@ def generate_random_color():
     return random.randrange(255), random.randrange(255), random.randrange(255)
 
 
+def text_objects(text, font):
+    textSurface = font.render(text, True, COLORS["black"])
+    return textSurface, textSurface.get_rect()
+
+
+def paused():
+
+    largeText = pg.font.SysFont("comicsansms", 115)
+    TextSurf, TextRect = text_objects("Paused", largeText)
+    TextRect.center = ((M_WIDTH / 2), (M_HEIGHT / 2))
+    pg.draw.rect(
+        pg.display.set_mode((WIDTH, HEIGHT)), COLORS["red"], pg.Rect(0, 0, 20, 5)
+    )
+
+
 # Drawing functions
 def draw_background(screen):
     full_screen = pg.Rect(0, 0, WIDTH, HEIGHT)
@@ -107,8 +122,6 @@ def main():
     speed = 4
     position = V2(MAP) / 2
 
-    # fruits=[[posf,(randint(0,256),randint(0,256),randint(0,256))]]
-
     # La boucle du jeu
     done = False
     while not done:
@@ -167,7 +180,9 @@ def main():
                 # si la touche est "Q" ou "escape" on veut quitter le programme
                 if event.key == pg.K_q or event.key == pg.K_ESCAPE:
                     done = True
-
+                if event.key == pg.K_p:
+                    pause = True
+                    paused()
     pg.quit()
 
 
