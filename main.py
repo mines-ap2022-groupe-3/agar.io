@@ -7,10 +7,6 @@ import pygame as pg
 from pygame.math import Vector2 as V2
 
 
-def change_color_back(color):
-    BACKGROUND_COLOR = COLORS[color]
-
-
 def main():
     clock = pg.time.Clock()
     time = 0
@@ -74,7 +70,7 @@ def main():
                 if event.key == pg.K_q or event.key == pg.K_ESCAPE:
                     done = True
             # condition de victoire
-            if SIZE == 150:
+            if blob_size == 50:
                 done = True
             # condition de défaite
             if time == 600:
