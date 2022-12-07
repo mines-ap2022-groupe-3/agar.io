@@ -7,6 +7,7 @@ from collections import namedtuple
 
 # Global variables
 from screen import M_WIDTH, M_HEIGHT
+
 PROBA_APPARITION_FRUIT = 0.05
 NB_MAX_FRUIT = 40
 RAYON_FRUIT_MIN = 5
