@@ -11,107 +11,11 @@ import time
 import pyautogui
 import matplotlib.pyplot as plt
 
-OVERMAP_BG = COLORS["white"]
-BOARD_COLOR = COLORS["blue"]
-BACKGROUND_COLOR = COLORS["black"]
-
-SCREEN = V2(1200, 800)
-WIDTH, HEIGHT = SCREEN
-SCREEN_CENTER = SCREEN / 2
-
-TILE_SIZE = 50
-
-MAP = 2 * SCREEN
-M_WIDTH, M_HEIGHT = MAP
-
-MAX_SPEED = 100
-
-# Utilities
-def round_to(n, div):
-    return floor(n / div) * div
+import utilities as utils
+import screen as s
 
 
-def clamp(value, min_value, max_value):
-    return min(max_value, max(value, min_value))
 
-
-def generate_random_color():
-    return random.randrange(255), random.randrange(255), random.randrange(255)
-
-
-def take_screenshot(screen):
-    myscreen = pyautogui.screenshot(region=(50, 0, WIDTH, HEIGHT))
-    myscreen.save("myscreen.jpg")
-
-
-def fichier_text():
-    f = open("map.txt", "w")
-    im = plt.imread("myscreen.jpg")
-    for i in range(len(im)):
-        for j in range(len(im[0])):
-            if im[i][j] == BACKGROUND_COLOR or im[i][j] == BOARD_COLOR:
-                f.write(" ")
-            else:
-                f.write("o")
-        f.write("\n")
-
-
-# Drawing functions
-def draw_background(screen):
-    full_screen = pg.Rect(0, 0, WIDTH, HEIGHT)
-    pg.draw.rect(screen, BACKGROUND_COLOR, full_screen)
-
-
-def draw_map(screen, position, tile_size=TILE_SIZE):
-    display_rect = pg.Rect(
-        position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
-    )
-
-    first_square_left = int(max(0, round_to(display_rect.left, tile_size)))
-    first_square_top = int(max(0, round_to(display_rect.top, tile_size)))
-
-    last_square_right = int(min(M_WIDTH, first_square_left + WIDTH))
-    last_square_bottom = int(min(M_HEIGHT, first_square_top + HEIGHT))
-
-    # Draw verticals lines
-    # left = 105
-    # right = 745
-    # tuile = 50
-    for i in range(first_square_left, last_square_right + 1, tile_size):
-        pos_i = i - display_rect.x
-        pg.draw.line(screen, BOARD_COLOR, (pos_i, 0), (pos_i, HEIGHT))
-
-    # Draw horizontals lines
-    for j in range(first_square_top, last_square_bottom + 1, tile_size):
-        pos_j = j - display_rect.y
-        pg.draw.line(screen, BOARD_COLOR, (0, pos_j), (WIDTH, pos_j))
-
-
-def draw_blob(screen, size=20, color=None):
-    x, y = SCREEN_CENTER
-    pg.draw.circle(screen, color, (x, y), size)
-
-
-def draw_overmap(screen, position):
-    display_rect = pg.Rect(
-        position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
-    )
-
-    if display_rect.left < 0:
-        mask = pg.Rect(0, 0, -display_rect.left, HEIGHT)
-        pg.draw.rect(screen, OVERMAP_BG, mask)
-
-    if display_rect.top < 0:
-        mask = pg.Rect(0, 0, WIDTH, -display_rect.top)
-        pg.draw.rect(screen, OVERMAP_BG, mask)
-
-    if display_rect.right >= M_WIDTH:
-        mask = pg.Rect(M_WIDTH - display_rect.right + WIDTH, 0, WIDTH, HEIGHT)
-        pg.draw.rect(screen, OVERMAP_BG, mask)
-
-    if display_rect.bottom >= M_HEIGHT:
-        mask = pg.Rect(0, M_HEIGHT - display_rect.bottom + HEIGHT, WIDTH, HEIGHT)
-        pg.draw.rect(screen, OVERMAP_BG, mask)
 
 
 def main():
@@ -119,14 +23,14 @@ def main():
 
     # on initialise pygame et on crée une fenêtre de 800x800 pixels
     pg.init()
-    screen = pg.display.set_mode((WIDTH, HEIGHT))
+    screen = pg.display.set_mode((s.WIDTH, s.HEIGHT))
 
     # On donne un titre à la fenetre
     pg.display.set_caption("agario")
 
-    color = generate_random_color()
+    color = utils.generate_random_color()
     speed = 4
-    position = V2(MAP) / 2
+    position = V2(s.MAP) / 2
 
     # La boucle du jeu
     done = False
@@ -135,24 +39,24 @@ def main():
         clock.tick(60)
 
         # On trouve la nouvelle direction/position
-        new_direction = V2(pg.mouse.get_pos()) - V2(SCREEN_CENTER)
-        if new_direction.magnitude() >= MAX_SPEED:
+        new_direction = V2(pg.mouse.get_pos()) - V2(s.SCREEN_CENTER)
+        if new_direction.magnitude() >= s.MAX_SPEED:
             new_direction = new_direction.normalize()
         else:
-            new_direction = new_direction / MAX_SPEED
+            new_direction = new_direction / s.MAX_SPEED
 
         position += new_direction * speed
 
         pg.display.set_caption(f"agario - {position.x=:5.0f} - {position.y=:5.0f}")
 
         # On s'assure que la position ne sorte pas de la map
-        position.x = clamp(position.x, 0, M_WIDTH)
-        position.y = clamp(position.y, 0, M_HEIGHT)
+        position.x = utils.clamp(position.x, 0, s.M_WIDTH)
+        position.y = utils.clamp(position.y, 0, s.M_HEIGHT)
 
-        draw_background(screen)
-        draw_map(screen, position)
-        draw_overmap(screen, position)
-        draw_blob(screen, color=color)
+        s.draw_background(screen)
+        s.draw_map(screen, position)
+        s.draw_overmap(screen, position)
+        s.draw_blob(screen, color=color)
 
         pg.display.update()
 
@@ -166,8 +70,8 @@ def main():
             # un type de pg.KEYDOWN signifie que l'on a appuyé une touche du clavier
             elif event.type == pg.KEYDOWN:
                 if event.key == pg.K_s:
-                    take_screenshot(screen)
-                    fichier_text()
+                    utils.take_screenshot(screen)
+                    utils.fichier_text()
                 # si la touche est "Q" ou "escape" on veut quitter le programme
                 if event.key == pg.K_q or event.key == pg.K_ESCAPE:
                     done = True
