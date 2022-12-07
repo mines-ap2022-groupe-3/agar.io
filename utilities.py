@@ -1,11 +1,12 @@
 import random
 from math import floor
+import pygame as pg
 from pygame.math import Vector2 as V2
 from collections import namedtuple
 
 
 # Global variables
-from screen import M_WIDTH, M_HEIGHT
+from screen import M_WIDTH, M_HEIGHT, SCREEN_CENTER
 
 PROBA_APPARITION_FRUIT = 0.05
 NB_MAX_FRUIT = 40
@@ -15,17 +16,22 @@ RAYON_FRUIT_MAX = 12
 Fruit = namedtuple("Fruit", ["xy", "color", "radius"])
 LIST_FRUITS = []
 
+MAX_SPEED = 100
+
 
 # Utilities
 def round_to(n, div):
+    """arrondi n"""
     return floor(n / div) * div
 
 
 def clamp(value, min_value, max_value):
+    """renvoie min_value si value<min_value, max_value si value>max_value, value sinon"""
     return min(max_value, max(value, min_value))
 
 
 def generate_random_color():
+    """génère une couleur aléatoire"""
     return random.randrange(255), random.randrange(255), random.randrange(255)
 
 
@@ -61,3 +67,14 @@ def eat_fruit(position, size) -> int:
             size = (size**2 + f.radius**2) ** (1 / 2)
             del LIST_FRUITS[LIST_FRUITS.index(f)]
     return size
+
+
+def new_direction():
+    """donne la nouvelle direction normalisée"""
+    new_direction = V2(pg.mouse.get_pos()) - V2(SCREEN_CENTER)
+    if new_direction.magnitude() >= MAX_SPEED:
+        new_direction = new_direction.normalize()
+    else:
+        new_direction = new_direction / MAX_SPEED
+
+    return new_direction

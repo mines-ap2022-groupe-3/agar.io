@@ -8,9 +8,8 @@ import screen as sc
 
 
 # Global variables
-from screen import WIDTH, HEIGHT, SCREEN_CENTER, MAP, M_WIDTH, M_HEIGHT
+from screen import WIDTH, HEIGHT, MAP, M_WIDTH, M_HEIGHT
 
-MAX_SPEED = 100
 BLOB_SIZE_IN = 20
 
 
@@ -35,29 +34,26 @@ def main():
         # FPS
         clock.tick(60)
 
-        # On trouve la nouvelle direction/position
-        new_direction = V2(pg.mouse.get_pos()) - V2(SCREEN_CENTER)
-        if new_direction.magnitude() >= MAX_SPEED:
-            new_direction = new_direction.normalize()
-        else:
-            new_direction = new_direction / MAX_SPEED
-
-        position += new_direction * speed
-
-        pg.display.set_caption(f"agario - {position.x=:5.0f} - {position.y=:5.0f}")
+        # On trouve la nouvelle position
+        position += ut.new_direction() * speed
 
         # On s'assure que la position ne sorte pas de la map
         position.x = ut.clamp(position.x, 0, M_WIDTH)
         position.y = ut.clamp(position.y, 0, M_HEIGHT)
 
+        # génération de fruit aléatoire
         ut.generate_fruit()
+
+        # modification de ut.LIST_FRUITS et modification de blob_size si le fruit est mangé
         blob_size = ut.eat_fruit(position, size=blob_size)
 
+        # affichage
         sc.draw_background(screen)
         sc.draw_map(screen, position)
         sc.draw_overmap(screen, position)
         sc.draw_fruits(screen, position)
         sc.draw_blob(screen, size=blob_size, color=color)
+        pg.display.set_caption(f"agario - {position.x=:5.0f} - {position.y=:5.0f}")
 
         pg.display.update()
 
