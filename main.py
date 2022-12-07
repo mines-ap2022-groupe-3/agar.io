@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import utilities
+import utilities as utls
 import screen as sc
 import fruit
 import pygame as pg
@@ -10,6 +10,8 @@ from pygame.math import Vector2 as V2
 def main():
     clock = pg.time.Clock()
 
+    count_screen = 0  # compteur pour les screens
+
     # on initialise pygame et on crée une fenêtre de 800x800 pixels
     pg.init()
     screen = pg.display.set_mode((sc.WIDTH, sc.HEIGHT))
@@ -18,7 +20,7 @@ def main():
     pg.display.set_caption("agario")
 
     blob_size = sc.BLOB_SIZE_IN
-    color = utilities.generate_random_color()
+    color = utls.generate_random_color()
     speed = 4
     position = V2(sc.MAP) / 2
     SCREEN_CENTER = sc.SCREEN / 2
@@ -42,8 +44,8 @@ def main():
         pg.display.set_caption(f"agario - {position.x=:5.0f} - {position.y=:5.0f}")
 
         # On s'assure que la position ne sorte pas de la map
-        position.x = utilities.clamp(position.x, 0, sc.M_WIDTH)
-        position.y = utilities.clamp(position.y, 0, sc.M_HEIGHT)
+        position.x = utls.clamp(position.x, 0, sc.M_WIDTH)
+        position.y = utls.clamp(position.y, 0, sc.M_HEIGHT)
 
         sc.draw_background(screen)
         sc.draw_map(screen, position)
@@ -68,6 +70,9 @@ def main():
                 # si la touche est "Q" ou "escape" on veut quitter le programme
                 if event.key == pg.K_q or event.key == pg.K_ESCAPE:
                     done = True
+                if event.key == pg.K_s:
+                    utls.screenshot(screen, count_screen)
+                    count_screen += 1
 
     pg.quit()
 
