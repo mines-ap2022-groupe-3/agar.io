@@ -7,8 +7,6 @@ import pygame as pg
 from pygame.math import Vector2 as V2
 
 
-
-
 def main():
     clock = pg.time.Clock()
 

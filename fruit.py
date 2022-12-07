@@ -15,7 +15,6 @@ RAYON_FRUIT_MIN = 5
 RAYON_FRUIT_MAX = 12
 
 
-
 # génération fruit
 Fruit = namedtuple("Fruit", ["xy", "color", "radius"])
 LIST_FRUITS = []
