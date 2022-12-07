@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
-import random
-from math import floor
-
+import utilities
+import screen as sc
+import fruit
 import pygame as pg
-from pygame.color import THECOLORS as COLORS
 from pygame.math import Vector2 as V2
+<<<<<<< HEAD
 from collections import namedtuple
 
 OVERMAP_BG = COLORS["white"]
@@ -172,6 +172,8 @@ def eat_fruit(position, size) -> int:
             size = (size**3 + f.radius**3) ** (1 / 3)
             del LIST_FRUITS[LIST_FRUITS.index(f)]
     return size
+=======
+>>>>>>> 162e4119430253f5494b37aa51e2b356d7d43cf0
 
 
 def main():
@@ -179,15 +181,17 @@ def main():
 
     # on initialise pygame et on crée une fenêtre de 800x800 pixels
     pg.init()
-    screen = pg.display.set_mode((WIDTH, HEIGHT))
+    screen = pg.display.set_mode((sc.WIDTH, sc.HEIGHT))
 
     # On donne un titre à la fenetre
     pg.display.set_caption("agario")
 
-    blob_size = BLOB_SIZE_IN
-    color = generate_random_color()
+    blob_size = sc.BLOB_SIZE_IN
+    color = utilities.generate_random_color()
     speed = 4
-    position = V2(MAP) / 2
+    position = V2(sc.MAP) / 2
+    SCREEN_CENTER = sc.SCREEN / 2
+    MAX_SPEED = 100
 
     # La boucle du jeu
     done = False
@@ -207,17 +211,17 @@ def main():
         pg.display.set_caption(f"agario - {position.x=:5.0f} - {position.y=:5.0f}")
 
         # On s'assure que la position ne sorte pas de la map
-        position.x = clamp(position.x, 0, M_WIDTH)
-        position.y = clamp(position.y, 0, M_HEIGHT)
+        position.x = utilities.clamp(position.x, 0, sc.M_WIDTH)
+        position.y = utilities.clamp(position.y, 0, sc.M_HEIGHT)
 
-        draw_background(screen)
-        draw_map(screen, position)
-        draw_overmap(screen, position)
+        sc.draw_background(screen)
+        sc.draw_map(screen, position)
+        sc.draw_overmap(screen, position)
 
-        generate_fruit()
-        blob_size = eat_fruit(position, size=blob_size)
-        draw_fruits(screen, position)
-        draw_blob(screen, size=blob_size, color=color)
+        fruit.generate_fruit()
+        blob_size = fruit.eat_fruit(position, size=blob_size)
+        fruit.draw_fruits(screen, position)
+        sc.draw_blob(screen, size=blob_size, color=color)
 
         pg.display.update()
 
