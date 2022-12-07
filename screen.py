@@ -7,6 +7,7 @@ import pygame as pg
 from pygame.color import THECOLORS as COLORS
 from pygame.math import Vector2 as V2
 from collections import namedtuple
+from utilities import clamp, round_to, generate_random_color
 
 OVERMAP_BG = COLORS["white"]
 BOARD_COLOR = COLORS["grey"]
@@ -29,18 +30,6 @@ RAYON_FRUIT_MIN = 5
 RAYON_FRUIT_MAX = 12
 
 BLOB_SIZE_IN = 20
-
-# Utilities
-def round_to(n, div):
-    return floor(n / div) * div
-
-
-def clamp(value, min_value, max_value):
-    return min(max_value, max(value, min_value))
-
-
-def generate_random_color():
-    return random.randrange(255), random.randrange(255), random.randrange(255)
 
 
 # Drawing functions
