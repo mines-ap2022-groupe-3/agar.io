@@ -4,6 +4,7 @@ import utilities
 import screen as sc
 import fruit
 import pygame as pg
+import enemy as e
 from pygame.math import Vector2 as V2
 
 
@@ -48,6 +49,15 @@ def main():
         sc.draw_background(screen)
         sc.draw_map(screen, position)
         sc.draw_overmap(screen, position)
+
+        # On construit plusieurs ennemies
+        while len(e.enemy.enemy_list) < 10:
+            e.enemy()
+        e.move_enemies(position, blob_size)
+        e.enemies_eat_fruits()
+        e.enemies_eat_enemies()
+        blob_size = e.eat_enemies(position, size=blob_size)
+        e.draw_enemies(screen, position)
 
         fruit.generate_fruit()
         blob_size = fruit.eat_fruit(position, size=blob_size)

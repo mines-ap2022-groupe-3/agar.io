@@ -61,6 +61,6 @@ def eat_fruit(position, size) -> int:
     for f in LIST_FRUITS:
         if (position - f.xy).length() < size:
             # formule pour ajouter à l'air du blob l'air du fruit
-            size = (size**3 + f.radius**3) ** (1 / 3)
+            size = (size**2 + f.radius**2) ** (1 / 2)
             del LIST_FRUITS[LIST_FRUITS.index(f)]
     return size
