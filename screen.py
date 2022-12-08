@@ -1,27 +1,15 @@
-import random
-from math import floor
-from utilities import round_to
-
 import pygame as pg
 from pygame.color import THECOLORS as COLORS
-from pygame.math import Vector2 as V2
-from collections import namedtuple
+import fruit as fr
+from utilities import round_to, SCREEN_CENTER, HEIGHT, WIDTH, M_HEIGHT, M_WIDTH
 
+
+# Global Variables
 OVERMAP_BG = COLORS["white"]
 BOARD_COLOR = COLORS["grey"]
 BACKGROUND_COLOR = COLORS["black"]
 
-SCREEN = V2(1200, 800)
-WIDTH, HEIGHT = SCREEN
-SCREEN_CENTER = SCREEN / 2
-
 TILE_SIZE = 50
-
-MAP = 2 * SCREEN
-M_WIDTH, M_HEIGHT = MAP
-
-MAX_SPEED = 100
-BLOB_SIZE_IN = 20
 
 
 # Drawing functions
@@ -80,3 +68,10 @@ def draw_overmap(screen, position):
     if display_rect.bottom >= M_HEIGHT:
         mask = pg.Rect(0, M_HEIGHT - display_rect.bottom + HEIGHT, WIDTH, HEIGHT)
         pg.draw.rect(screen, OVERMAP_BG, mask)
+
+
+def draw_fruits(screen, position):
+    """affiche les fruits"""
+    for f in fr.LIST_FRUITS:
+        center = f.xy - position + SCREEN_CENTER
+        pg.draw.circle(screen, f.color, center, f.radius)
