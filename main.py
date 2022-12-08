@@ -4,7 +4,6 @@ import utilities
 import screen as sc
 import fruit
 import pygame as pg
-from pygame.math import Vector2 as V2
 
 
 def main():
@@ -17,12 +16,9 @@ def main():
     # On donne un titre à la fenetre
     pg.display.set_caption("agario")
 
-    blob_size = sc.BLOB_SIZE_IN
+    blob_size = utilities.BLOB_SIZE_IN
     color = utilities.generate_random_color()
-    speed = 4
-    position = V2(sc.MAP) / 2
-    SCREEN_CENTER = sc.SCREEN / 2
-    MAX_SPEED = 100
+    position = utilities.MAP_CENTER
 
     # La boucle du jeu
     done = False
@@ -30,30 +26,26 @@ def main():
         # FPS
         clock.tick(60)
 
-        # On trouve la nouvelle direction/position
-        new_direction = V2(pg.mouse.get_pos()) - V2(SCREEN_CENTER)
-        if new_direction.magnitude() >= MAX_SPEED:
-            new_direction = new_direction.normalize()
-        else:
-            new_direction = new_direction / MAX_SPEED
-
-        position += new_direction * speed
-
-        pg.display.set_caption(f"agario - {position.x=:5.0f} - {position.y=:5.0f}")
+        # On déplace
+        position += utilities.differencial_position(pg.mouse.get_pos())
 
         # On s'assure que la position ne sorte pas de la map
         position.x = utilities.clamp(position.x, 0, sc.M_WIDTH)
         position.y = utilities.clamp(position.y, 0, sc.M_HEIGHT)
 
+        # génération des fruits aléatoirement
+        fruit.generate_fruit()
+        # On mange les fruits à l'intérieur du blob
+        blob_size = fruit.eat_fruit(position, size=blob_size)
+
+        # On affiche tout
         sc.draw_background(screen)
         sc.draw_map(screen, position)
         sc.draw_overmap(screen, position)
-
-        fruit.generate_fruit()
-        blob_size = fruit.eat_fruit(position, size=blob_size)
-        fruit.draw_fruits(screen, position)
         sc.draw_blob(screen, size=blob_size, color=color)
+        sc.draw_fruits(screen, position)
 
+        pg.display.set_caption(f"agario - {position.x=:5.0f} - {position.y=:5.0f}")
         pg.display.update()
 
         # on itère sur tous les évênements qui ont eu lieu depuis le précédent appel
