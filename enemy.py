@@ -60,6 +60,12 @@ class enemy:
                 self.set_radius((self.radius**2 + en.radius**2) ** (1 / 2))
                 del enemy.enemy_list[enemy.enemy_list.index(en)]
 
+    def eat_player(self, player_position, blob_size):
+        """manger le joueur si dans son rayon"""
+        return (
+            player_position - self.xy
+        ).length() < self.radius and self.radius > blob_size
+
 
 # affichage enemies
 def draw_enemies(screen, position):
@@ -102,6 +108,15 @@ def eat_enemies(position, size) -> int:
     return size
 
 
+# ennemies mange joueur
+def enemies_eat_player(player_position, blob_size):
+    for en in enemy.enemy_list:
+        if en.eat_player(player_position, blob_size):
+            return True
+    return False
+
+
+# préparation des directions
 def is_inside_of_screen(pos_eatable, position):
     """renvoie si un objet mangeable (fruit, joueur, ou ennemie) est affiché pour l'objet à position"""
     return (

@@ -7,6 +7,10 @@ import pygame as pg
 import enemy as e
 from pygame.math import Vector2 as V2
 
+NB_ENEMY = 5
+MAX_SPEED = 100
+SCREEN_CENTER = sc.SCREEN / 2
+
 
 def main():
     clock = pg.time.Clock()
@@ -22,8 +26,6 @@ def main():
     color = utilities.generate_random_color()
     speed = 4
     position = V2(sc.MAP) / 2
-    SCREEN_CENTER = sc.SCREEN / 2
-    MAX_SPEED = 100
 
     # La boucle du jeu
     done = False
@@ -51,13 +53,15 @@ def main():
         sc.draw_overmap(screen, position)
 
         # On construit plusieurs ennemies
-        while len(e.enemy.enemy_list) < 10:
+        while len(e.enemy.enemy_list) < NB_ENEMY:
             e.enemy()
         e.move_enemies(position, blob_size)
         e.enemies_eat_fruits()
         e.enemies_eat_enemies()
         blob_size = e.eat_enemies(position, size=blob_size)
         e.draw_enemies(screen, position)
+        if e.enemies_eat_player(position, blob_size):
+            done = True
 
         fruit.generate_fruit()
         blob_size = fruit.eat_fruit(position, size=blob_size)
