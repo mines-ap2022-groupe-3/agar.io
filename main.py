@@ -39,7 +39,6 @@ def main():
         # Finding position
         player_position = blob.get_pos()
 
-
         # drawing map
         sc.draw_background(screen)
         sc.draw_map(screen, player_position)
