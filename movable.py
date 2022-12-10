@@ -1,7 +1,6 @@
-import pygame as pg
 from fruit import Fruit
 from utilities import clamp
-from screen import SCREEN_CENTER, M_WIDTH, M_HEIGHT
+from screen import M_WIDTH, M_HEIGHT
 
 
 class Movable:
@@ -57,21 +56,9 @@ class Movable:
 
         self.set_pos(new_pos)
 
-    def draw_movable(self, screen, player_position):
-        """draw movable on screen"""
-        center = self.xy - player_position + SCREEN_CENTER
-        pg.draw.circle(screen, self.color, center, self.radius)
-
 
 # movables eat other movables and fruits
 def movables_eat():
     for m in Movable.movable_list:
         m.eat_other_movables()
         m.eat_fruits()
-
-
-# display movables
-def draw_movables(screen, player_position):
-    """affiche les movables"""
-    for m in Movable.movable_list:
-        m.draw_movable(screen, player_position)

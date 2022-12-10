@@ -54,8 +54,10 @@ def main():
         mov.movables_eat()
 
         # draw movables and fruits on screen
-        mov.draw_movables(screen, player_position)
-        fruit.draw_fruits(screen, player_position)
+        for f in fruit.Fruit.fruits_list:
+            sc.draw_fruit(f, screen, player_position)
+        for m in mov.Movable.movable_list:
+            sc.draw_movable(m, screen, player_position)
 
         pg.display.update()
 

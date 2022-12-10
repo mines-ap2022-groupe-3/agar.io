@@ -1,8 +1,7 @@
 import random
-import pygame as pg
 from pygame.math import Vector2 as V2
 from utilities import generate_random_color
-from screen import SCREEN_CENTER, M_HEIGHT, M_WIDTH
+from screen import M_HEIGHT, M_WIDTH
 
 
 class Fruit:
@@ -20,10 +19,23 @@ class Fruit:
         self.radius = random.randint(Fruit.fruit_min_radius, Fruit.fruit_max_radius)
         Fruit.fruits_list.append(self)
 
-    def draw_fruit(self, screen, player_position):
-        """draw fruit"""
-        center = self.xy - player_position + SCREEN_CENTER
-        pg.draw.circle(screen, self.color, center, self.radius)
+    def set_pos(self, pos):
+        self.xy = pos
+
+    def set_radius(self, radius):
+        self.radius = radius
+
+    def set_color(self, color):
+        self.color = color
+
+    def get_pos(self):
+        return self.xy
+
+    def get_color(self):
+        return self.color
+
+    def get_radius(self):
+        return self.radius
 
     def eat_fruit(self, blob_position, blob_size) -> int:
         """si le fruit est assez proche, le mange. Renvoie la nouvelle taille après absorbation d'un ou plusieurs fruits"""
@@ -41,9 +53,3 @@ def generate_fruit():
         and len(Fruit.fruits_list) < Fruit.max_nb_fruit
     ):
         Fruit()
-
-
-def draw_fruits(screen, player_position):
-    """draw all fruits on screen"""
-    for f in Fruit.fruits_list:
-        f.draw_fruit(screen, player_position)

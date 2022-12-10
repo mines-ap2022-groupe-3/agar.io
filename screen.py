@@ -72,3 +72,15 @@ def draw_overmap(screen, position):
     if display_rect.bottom >= M_HEIGHT:
         mask = pg.Rect(0, M_HEIGHT - display_rect.bottom + HEIGHT, WIDTH, HEIGHT)
         pg.draw.rect(screen, OVERMAP_BG, mask)
+
+
+def draw_movable(movable, screen, player_position):
+    """draw movable on screen"""
+    center = movable.get_pos() - player_position + SCREEN_CENTER
+    pg.draw.circle(screen, movable.get_color(), center, movable.get_radius())
+
+
+def draw_fruit(fruit, screen, player_position):
+    """draw fruit"""
+    center = fruit.get_pos() - player_position + SCREEN_CENTER
+    pg.draw.circle(screen, fruit.get_color(), center, fruit.get_radius())
