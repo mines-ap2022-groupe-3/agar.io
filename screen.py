@@ -1,11 +1,8 @@
-import random
-from math import floor
 from utilities import round_to
-
 import pygame as pg
 from pygame.color import THECOLORS as COLORS
 from pygame.math import Vector2 as V2
-from collections import namedtuple
+
 
 OVERMAP_BG = COLORS["white"]
 BOARD_COLOR = COLORS["grey"]
@@ -53,11 +50,6 @@ def draw_map(screen, position, tile_size=TILE_SIZE):
     for j in range(first_square_top, last_square_bottom + 1, tile_size):
         pos_j = j - display_rect.y
         pg.draw.line(screen, BOARD_COLOR, (0, pos_j), (WIDTH, pos_j))
-
-
-def draw_blob(screen, size, color=None):
-    x, y = SCREEN_CENTER
-    pg.draw.circle(screen, color, (x, y), size)
 
 
 def draw_overmap(screen, position):

@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 
-import utilities
 import screen as sc
 import fruit
 import pygame as pg
 import enemy as e
 from pygame.math import Vector2 as V2
+import player
+import movable as mov
 
-NB_ENEMY = 5
+
 MAX_SPEED = 100
 SCREEN_CENTER = sc.SCREEN / 2
 
@@ -22,10 +23,8 @@ def main():
     # On donne un titre à la fenetre
     pg.display.set_caption("agario")
 
-    blob_size = sc.BLOB_SIZE_IN
-    color = utilities.generate_random_color()
-    speed = 4
-    position = V2(sc.MAP) / 2
+    blob = player.Player()
+    player_position = V2(sc.MAP) / 2
 
     # La boucle du jeu
     done = False
@@ -33,40 +32,31 @@ def main():
         # FPS
         clock.tick(60)
 
-        # On trouve la nouvelle direction/position
-        new_direction = V2(pg.mouse.get_pos()) - V2(SCREEN_CENTER)
-        if new_direction.magnitude() >= MAX_SPEED:
-            new_direction = new_direction.normalize()
-        else:
-            new_direction = new_direction / MAX_SPEED
+        pg.display.set_caption(
+            f"agario - {player_position.x=:5.0f} - {player_position.y=:5.0f}"
+        )
 
-        position += new_direction * speed
+        # Finding position
+        player_position = blob.get_pos()
 
-        pg.display.set_caption(f"agario - {position.x=:5.0f} - {position.y=:5.0f}")
 
-        # On s'assure que la position ne sorte pas de la map
-        position.x = utilities.clamp(position.x, 0, sc.M_WIDTH)
-        position.y = utilities.clamp(position.y, 0, sc.M_HEIGHT)
-
+        # drawing map
         sc.draw_background(screen)
-        sc.draw_map(screen, position)
-        sc.draw_overmap(screen, position)
+        sc.draw_map(screen, player_position)
+        sc.draw_overmap(screen, player_position)
 
-        # On construit plusieurs ennemies
-        while len(e.enemy.enemy_list) < NB_ENEMY:
-            e.enemy()
-        e.move_enemies(position, blob_size)
-        e.enemies_eat_fruits()
-        e.enemies_eat_enemies()
-        blob_size = e.eat_enemies(position, size=blob_size)
-        e.draw_enemies(screen, position)
-        if e.enemies_eat_player(position, blob_size):
-            done = True
-
+        # generate enemies and fruits
+        e.generate_enemies()
         fruit.generate_fruit()
-        blob_size = fruit.eat_fruit(position, size=blob_size)
-        fruit.draw_fruits(screen, position)
-        sc.draw_blob(screen, size=blob_size, color=color)
+
+        # Move and eat
+        e.move_enemies()
+        player.move_player(blob)
+        mov.movables_eat()
+
+        # draw movables and fruits on screen
+        mov.draw_movables(screen, player_position)
+        fruit.draw_fruits(screen, player_position)
 
         pg.display.update()
 
