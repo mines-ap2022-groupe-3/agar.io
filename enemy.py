@@ -71,7 +71,7 @@ class Enemy(Movable):
         return self.direction_auto() * Enemy.speed
 
 
-#generate enemies
+# Generate enemies
 def generate_enemies():
     enemy_list = [mov for mov in Movable.movable_list if isinstance(mov, Enemy)]
     for _ in range(len(enemy_list), MAX_ENEMY_NB):
