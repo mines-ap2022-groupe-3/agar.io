@@ -48,7 +48,7 @@ class Movable:
                 self.set_radius((self.radius**2 + m.get_radius() ** 2) ** (1 / 2))
                 del Movable.movable_list[Movable.movable_list.index(m)]
 
-    def new_pos(self, differential_position):
+    def move(self, differential_position):
         """return the new position after one clock time"""
         new_pos = self.xy + differential_position
         new_pos.x = clamp(new_pos.x, 0, M_WIDTH)

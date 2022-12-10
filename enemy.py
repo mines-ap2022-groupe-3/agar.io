@@ -83,7 +83,7 @@ def move_enemies():
     """bouge chaque movable un par un"""
     enemy_list = [mov for mov in Movable.movable_list if isinstance(mov, Enemy)]
     for en in enemy_list:
-        en.new_pos(en.differential_pos())
+        en.move(en.differential_pos())
 
 
 # fonctions d'évaluation

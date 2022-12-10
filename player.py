@@ -36,4 +36,4 @@ class Player(Movable):
 # Bouger
 def move_player(player):
     """bouge chaque movable un par un"""
-    player.new_pos(player.differential_pos())
+    player.move(player.differential_pos())
