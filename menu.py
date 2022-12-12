@@ -23,12 +23,12 @@ def change_color_blop(index, color):
     sc.COLOR_BLOP = COLORS[color]
 
 
-def get_player_name(name):
+def change_player_name(name):
     """Permet de récupérer le nom du joueur à partir du menu"""
     sc.PLAYER_NAME = name
 
 
-def pause_menu_loop(pauseMenu, screen):
+def display_pause_menu(pauseMenu, screen):
     """Pour faire tourner le menu pause"""
     while pauseMenu.is_enabled():
         events = pg.event.get()

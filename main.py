@@ -28,7 +28,9 @@ def main():
     pauseMenu = pg_menu.Menu(
         "Pause", sc.WIDTH / 2, sc.HEIGHT / 2, theme=pg_menu.themes.THEME_BLUE
     )
-    pauseMenu.add.text_input("Name : ", default="Player", onchange=menu.get_player_name)
+    pauseMenu.add.text_input(
+        "Name : ", default="Player", onchange=menu.change_player_name
+    )
     pauseMenu.add.selector(
         "Couleur du fond : ", menu.INDEX, onchange=menu.change_color_background
     )
@@ -53,7 +55,7 @@ def main():
 
         # Je commence par regarder si je dois afficher le menu
         if pauseMenu.is_enabled():
-            menu.pause_menu_loop(pauseMenu, screen)
+            menu.display_pause_menu(pauseMenu, screen)
 
         # On trouve la nouvelle direction/position
         new_direction = V2(pg.mouse.get_pos()) - V2(SCREEN_CENTER)
