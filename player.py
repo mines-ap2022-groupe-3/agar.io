@@ -31,9 +31,3 @@ class Player(Movable):
             differential_position = new_direction / Player.max_speed * Player.speed
 
         return differential_position
-
-
-# Bouger
-def move_player(player):
-    """bouge chaque movable un par un"""
-    player.move(player.differential_pos())

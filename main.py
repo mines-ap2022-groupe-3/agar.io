@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 
 import screen as sc
-import fruit
 import pygame as pg
-import enemy as e
-from pygame.math import Vector2 as V2
-import player
-import movable as mov
+from movable import Movable
+from player import Player
+from enemy import generate_enemies
+from fruit import Fruit, generate_fruit
 
 
 MAX_SPEED = 100
@@ -23,8 +22,7 @@ def main():
     # On donne un titre à la fenetre
     pg.display.set_caption("agario")
 
-    blob = player.Player()
-    player_position = V2(sc.MAP) / 2
+    player = Player()
 
     # La boucle du jeu
     done = False
@@ -33,31 +31,29 @@ def main():
         clock.tick(60)
 
         pg.display.set_caption(
-            f"agario - {player_position.x=:5.0f} - {player_position.y=:5.0f}"
+            f"agario - {player.get_pos().x=:5.0f} - {player.get_pos().y=:5.0f}"
         )
-
-        # Finding position
-        player_position = blob.get_pos()
 
         # drawing map
         sc.draw_background(screen)
-        sc.draw_map(screen, player_position)
-        sc.draw_overmap(screen, player_position)
+        sc.draw_map(screen, player.get_pos())
+        sc.draw_overmap(screen, player.get_pos())
 
         # generate enemies and fruits
-        e.generate_enemies()
-        fruit.generate_fruit()
+        generate_enemies()
+        generate_fruit()
 
         # Move and eat
-        e.move_enemies()
-        player.move_player(blob)
-        mov.movables_eat()
+        for movable in Movable.movable_list:
+            movable.eat_other_movables()
+            movable.eat_fruits()
+            movable.move(movable.differential_pos())
 
         # draw movables and fruits on screen
-        for f in fruit.Fruit.fruits_list:
-            sc.draw_fruit(f, screen, player_position)
-        for m in mov.Movable.movable_list:
-            sc.draw_movable(m, screen, player_position)
+        for f in Fruit.fruits_list:
+            sc.draw_fruit(f, screen, player.get_pos())
+        for m in Movable.movable_list:
+            sc.draw_movable(m, screen, player.get_pos())
 
         pg.display.update()
 

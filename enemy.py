@@ -61,7 +61,7 @@ class Enemy(Movable):
                 direction = pos_relative.normalize()
 
             elif eval == -1:
-                direction -= eval_dangerosity(distance_enemy) * pos_relative.normalize()
+                direction -= eval_dangerosity(distance_enemy, m.get_radius()) * pos_relative.normalize()
 
         direction = direction.normalize()
         return direction
@@ -78,14 +78,6 @@ def generate_enemies():
         Enemy()
 
 
-# Bouger
-def move_enemies():
-    """bouge chaque movable un par un"""
-    enemy_list = [mov for mov in Movable.movable_list if isinstance(mov, Enemy)]
-    for en in enemy_list:
-        en.move(en.differential_pos())
-
-
 # fonctions d'évaluation
 def eval_eatable(distance_eatable, r_eatable, radius):
     """donne un nombre correspondant à l'évaluation d'intéret à aller vers un objet mangeable plutôt qu'un autre"""
@@ -94,6 +86,6 @@ def eval_eatable(distance_eatable, r_eatable, radius):
     return 50 / distance_eatable + r_eatable
 
 
-def eval_dangerosity(distance_enemy):
+def eval_dangerosity(distance_enemy, radius_enemy):
     """évalue la dangerositée de rester prêt d'un enemy plus gros que nous"""
-    return 50 / distance_enemy
+    return 80 / (distance_enemy - radius_enemy)
