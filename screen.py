@@ -10,6 +10,8 @@ from collections import namedtuple
 OVERMAP_BG = COLORS["white"]
 BOARD_COLOR = COLORS["grey"]
 BACKGROUND_COLOR = COLORS["black"]
+PLAYER_NAME = "Player"
+COLOR_BLOP = COLORS["green"]
 
 SCREEN = V2(1200, 800)
 WIDTH, HEIGHT = SCREEN
@@ -22,7 +24,6 @@ M_WIDTH, M_HEIGHT = MAP
 
 MAX_SPEED = 100
 BLOB_SIZE_IN = 20
-
 
 # Drawing functions
 def draw_background(screen):
