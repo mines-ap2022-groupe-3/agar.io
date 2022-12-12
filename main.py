@@ -71,8 +71,8 @@ def main():
                 if event.key == pg.K_q or event.key == pg.K_ESCAPE:
                     done = True
                 if event.key == pg.K_s:
-                    utls.screenshot(screen, count_screen)
-                    count_screen += 1
+                    utls.screenshot(screen)
+                    utls.screenshot_txt(fruit.LIST_FRUITS, position)
 
     pg.quit()
 
@@ -80,4 +80,3 @@ def main():
 # if python says run, then we should run
 if __name__ == "__main__":
     main()
-    # print(round_to(105, 19))

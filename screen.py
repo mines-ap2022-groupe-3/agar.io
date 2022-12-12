@@ -1,6 +1,6 @@
 import random
 from math import floor
-from utilities import round_to
+import utilities as utls
 
 import pygame as pg
 from pygame.color import THECOLORS as COLORS
@@ -35,8 +35,8 @@ def draw_map(screen, position, tile_size=TILE_SIZE):
         position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
     )
 
-    first_square_left = int(max(0, round_to(display_rect.left, tile_size)))
-    first_square_top = int(max(0, round_to(display_rect.top, tile_size)))
+    first_square_left = int(max(0, utls.round_to(display_rect.left, tile_size)))
+    first_square_top = int(max(0, utls.round_to(display_rect.top, tile_size)))
 
     last_square_right = int(min(M_WIDTH, first_square_left + WIDTH))
     last_square_bottom = int(min(M_HEIGHT, first_square_top + HEIGHT))
