@@ -8,71 +8,7 @@ from pygame.math import Vector2 as V2
 import pygame_menu as pg_menu
 from pygame.color import THECOLORS as COLORS
 from pygame.math import Vector2 as V2
-import pygame_menu as pg_menu
-
-PLAYER_NAME = "Player"
-
-INDEX = [
-    ("Black", "black"),
-    ("White", "white"),
-    ("Blue", "blue"),
-    ("Red", "red"),
-    ("Green", "green"),
-]
-
-
-def change_color_background(index, color):
-    """Permet de changer la couleur du fond d'écran à partir du menu"""
-    global BACKGROUND_COLOR
-    BACKGROUND_COLOR = COLORS[color]
-
-
-def change_color_blop(index, color):
-    """Permet de changer la couleur du blop à partir du menu"""
-    global COLOR_BLOP
-    COLOR_BLOP = COLORS[color]
-
-
-def get_player_name(name):
-    """Permet de récupérer le nom du joueur à partir du menu"""
-    global PLAYER_NAME
-    PLAYER_NAME = name
-
-
-def PAUSE_MENU(pauseMenu, screen):
-    """Pour faire tourner le menu pause"""
-    while pauseMenu.is_enabled():
-        events = pg.event.get()
-        pauseMenu.draw(screen)
-        pauseMenu.update(events)
-        pg.display.update()
-
-
-def change_color_background(index, color):
-    """Permet de changer la couleur du fond d'écran à partir du menu"""
-    global BACKGROUND_COLOR
-    BACKGROUND_COLOR = COLORS[color]
-
-
-def change_color_blop(index, color):
-    """Permet de changer la couleur du blop à partir du menu"""
-    global COLOR_BLOP
-    COLOR_BLOP = COLORS[color]
-
-
-def get_player_name(name):
-    """Permet de récupérer le nom du joueur à partir du menu"""
-    global PLAYER_NAME
-    PLAYER_NAME = name
-
-
-def PAUSE_MENU(pauseMenu, screen):
-    """Pour faire tourner le menu pause"""
-    while pauseMenu.is_enabled():
-        events = pg.event.get()
-        pauseMenu.draw(screen)
-        pauseMenu.update(events)
-        pg.display.update()
+import menu
 
 
 def main():
@@ -86,21 +22,24 @@ def main():
     pg.display.set_caption("agario")
 
     blob_size = sc.BLOB_SIZE_IN
-    color = utilities.generate_random_color()    
-    
+    color = utilities.generate_random_color()
+
     # Création du menu de pause et initialisation des différents éléments
     pauseMenu = pg_menu.Menu(
         "Pause", sc.WIDTH / 2, sc.HEIGHT / 2, theme=pg_menu.themes.THEME_BLUE
     )
-    pauseMenu.add.text_input("Name : ", default="Player", onchange=get_player_name)
+    pauseMenu.add.text_input("Name : ", default="Player", onchange=menu.get_player_name)
     pauseMenu.add.selector(
-        "Couleur du fond : ", INDEX, onchange=change_color_background
+        "Couleur du fond : ", menu.INDEX, onchange=menu.change_color_background
     )
-    pauseMenu.add.selector("Couleur du blop : ", INDEX, onchange=change_color_blop)
+    pauseMenu.add.selector(
+        "Couleur du blop : ", menu.INDEX, onchange=menu.change_color_blop
+    )
     pauseMenu.add.button("Continuer", pauseMenu.disable)
     pauseMenu.add.button("Recommencer", main)
     pauseMenu.add.button("Quitter", pg_menu.events.EXIT)
     pauseMenu.disable()  # par défault on n'affiche pas le menu
+
     speed = 4
     position = V2(sc.MAP) / 2
     SCREEN_CENTER = sc.SCREEN / 2
@@ -114,7 +53,7 @@ def main():
 
         # Je commence par regarder si je dois afficher le menu
         if pauseMenu.is_enabled():
-            PAUSE_MENU(pauseMenu, screen)
+            menu.pause_menu_loop(pauseMenu, screen)
 
         # On trouve la nouvelle direction/position
         new_direction = V2(pg.mouse.get_pos()) - V2(SCREEN_CENTER)
@@ -126,7 +65,7 @@ def main():
         position += new_direction * speed
 
         pg.display.set_caption(
-            f"agario - {position.x=:5.0f} - {position.y=:5.0f} - Partie de {PLAYER_NAME}"
+            f"agario - {position.x=:5.0f} - {position.y=:5.0f} - Partie de {sc.PLAYER_NAME}"
         )
 
         # On s'assure que la position ne sorte pas de la map
@@ -140,7 +79,7 @@ def main():
         fruit.generate_fruit()
         blob_size = fruit.eat_fruit(position, size=blob_size)
         fruit.draw_fruits(screen, position)
-        sc.draw_blob(screen, size=blob_size, color=color)
+        sc.draw_blob(screen, size=blob_size, color=sc.COLOR_BLOP)
 
         pg.display.update()
 
