@@ -61,7 +61,10 @@ class Enemy(Movable):
                 direction = pos_relative.normalize()
 
             elif eval == -1:
-                direction -= eval_dangerosity(distance_enemy, m.get_radius()) * pos_relative.normalize()
+                direction -= (
+                    eval_dangerosity(distance_enemy, m.get_radius())
+                    * pos_relative.normalize()
+                )
 
         direction = direction.normalize()
         return direction
