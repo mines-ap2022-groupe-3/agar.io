@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import utilities
+from utilities import generate_random_color, clamp, take_screenshot
 import screen as sc
 import fruit
 import pygame as pg
@@ -18,7 +18,7 @@ def main():
     pg.display.set_caption("agario")
 
     blob_size = sc.BLOB_SIZE_IN
-    color = utilities.generate_random_color()
+    color = generate_random_color()
     speed = 4
     position = V2(sc.MAP) / 2
     SCREEN_CENTER = sc.SCREEN / 2
@@ -42,8 +42,8 @@ def main():
         pg.display.set_caption(f"agario - {position.x=:5.0f} - {position.y=:5.0f}")
 
         # On s'assure que la position ne sorte pas de la map
-        position.x = utilities.clamp(position.x, 0, sc.M_WIDTH)
-        position.y = utilities.clamp(position.y, 0, sc.M_HEIGHT)
+        position.x = clamp(position.x, 0, sc.M_WIDTH)
+        position.y = clamp(position.y, 0, sc.M_HEIGHT)
 
         sc.draw_background(screen)
         sc.draw_map(screen, position)
@@ -68,6 +68,8 @@ def main():
                 # si la touche est "Q" ou "escape" on veut quitter le programme
                 if event.key == pg.K_q or event.key == pg.K_ESCAPE:
                     done = True
+                if event.key == pg.K_s:
+                    take_screenshot(screen, fruit.LIST_FRUITS, position)
 
     pg.quit()
 
@@ -75,4 +77,3 @@ def main():
 # if python says run, then we should run
 if __name__ == "__main__":
     main()
-    # print(round_to(105, 19))
