@@ -6,10 +6,10 @@ from fruit import Fruit
 from movable import Movable
 
 
-MAX_ENEMY_NB = 10
+MAX_BOT_NB = 10
 
 
-class Enemy(Movable):
+class Bot(Movable):
 
     speed = 3.5
 
@@ -71,14 +71,14 @@ class Enemy(Movable):
 
     def differential_pos(self):
         """renvoie la différence de position entre deux temps d'horloges"""
-        return self.direction_auto() * Enemy.speed
+        return self.direction_auto() * Bot.speed
 
 
 # Generate enemies
-def generate_enemies():
-    enemy_list = [mov for mov in Movable.movable_list if isinstance(mov, Enemy)]
-    for _ in range(len(enemy_list), MAX_ENEMY_NB):
-        Enemy()
+def generate_bot():
+    bot_list = [mov for mov in Movable.movable_list if isinstance(mov, Bot)]
+    for _ in range(len(bot_list), MAX_BOT_NB):
+        Bot()
 
 
 # fonctions d'évaluation

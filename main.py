@@ -4,7 +4,7 @@ import screen as sc
 import pygame as pg
 from movable import Movable
 from player import Player
-from enemy import generate_enemies
+from bot import generate_bot
 from fruit import Fruit, generate_fruit
 
 
@@ -40,7 +40,7 @@ def main():
         sc.draw_overmap(screen, player.get_pos())
 
         # generate enemies and fruits
-        generate_enemies()
+        generate_bot()
         generate_fruit()
 
         # Move and eat
