@@ -10,9 +10,6 @@ MAX_BOT_NB = 10
 
 
 class Bot(Movable):
-
-    speed = 3.5
-
     def __init__(
         self,
         radius=20,
@@ -71,7 +68,7 @@ class Bot(Movable):
 
     def differential_pos(self):
         """renvoie la différence de position entre deux temps d'horloges"""
-        return self.direction_auto() * Bot.speed
+        return self.direction_auto() * self.speed()
 
 
 # Generate enemies

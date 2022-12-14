@@ -47,7 +47,7 @@ def main():
         for movable in Movable.movable_list:
             movable.eat_other_movables()
             movable.eat_fruits()
-            movable.move(movable.differential_pos())
+            movable.move()
 
         # draw movables and fruits on screen
         for f in Fruit.fruits_list:

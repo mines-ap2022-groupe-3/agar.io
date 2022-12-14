@@ -7,7 +7,6 @@ from movable import Movable
 
 class Player(Movable):
 
-    speed = 4
     max_speed = 100
 
     def __init__(
@@ -26,8 +25,8 @@ class Player(Movable):
         # On trouve la nouvelle direction/position
         new_direction = V2(pg.mouse.get_pos()) - V2(SCREEN_CENTER)
         if new_direction.magnitude() >= Player.max_speed:
-            differential_position = new_direction.normalize() * Player.speed
+            differential_position = new_direction.normalize() * self.speed()
         else:
-            differential_position = new_direction / Player.max_speed * Player.speed
+            differential_position = new_direction / Player.max_speed * self.speed()
 
         return differential_position
