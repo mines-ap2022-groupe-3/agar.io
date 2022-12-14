@@ -2,9 +2,10 @@ import random
 from pygame.math import Vector2 as V2
 from utilities import generate_random_color
 from screen import M_HEIGHT, M_WIDTH
+from circle import Circle
 
 
-class Fruit:
+class Fruit(Circle):
 
     apparition_proba_fruit = 0.10
     max_nb_fruit = 50
@@ -19,27 +20,10 @@ class Fruit:
         self.radius = random.randint(Fruit.fruit_min_radius, Fruit.fruit_max_radius)
         Fruit.fruits_list.append(self)
 
-    def set_pos(self, pos):
-        self.xy = pos
-
-    def set_radius(self, radius):
-        self.radius = radius
-
-    def set_color(self, color):
-        self.color = color
-
-    def get_pos(self):
-        return self.xy
-
-    def get_color(self):
-        return self.color
-
-    def get_radius(self):
-        return self.radius
-
-    def eat_fruit(self, blob_position, blob_size) -> int:
+    def eat_fruit(self, movable) -> int:
         """si le fruit est assez proche, le mange. Renvoie la nouvelle taille après absorbation d'un ou plusieurs fruits"""
-        if (blob_position - self.xy).length() < blob_size:
+        blob_size = movable.get_radius()
+        if movable.circle_center_inside_self(self):
             # formule pour ajouter à l'air du blob l'air du fruit
             blob_size = (blob_size**2 + self.radius**2) ** (1 / 2)
             del Fruit.fruits_list[Fruit.fruits_list.index(self)]

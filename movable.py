@@ -1,49 +1,24 @@
 from fruit import Fruit
 from utilities import clamp
 from screen import M_WIDTH, M_HEIGHT
+from circle import Circle
 
 
-class Movable:
+class Movable(Circle):
     """movable is player or enemy"""
 
     movable_list = []
 
-    def __init__(self, radius, xy, color):
-        self.xy = xy
-        self.color = color
-        self.radius = radius
-        Movable.movable_list.append(self)
-
-    def set_pos(self, pos):
-        self.xy = pos
-
-    def set_radius(self, radius):
-        self.radius = radius
-
-    def set_color(self, color):
-        self.color = color
-
-    def get_pos(self):
-        return self.xy
-
-    def get_color(self):
-        return self.color
-
-    def get_radius(self):
-        return self.radius
-
     def eat_fruits(self):
         """eat all fruits inside the blob"""
         for f in Fruit.fruits_list:
-            self.set_radius(f.eat_fruit(self.xy, self.radius))
+            self.set_radius(f.eat_fruit(self))
 
     def eat_other_movables(self):
         """mange les enemies de enemy_list qui sont dans son rayon"""
         list = [m for m in Movable.movable_list if m != self]
         for m in list:
-            if (
-                self.xy - m.get_pos()
-            ).length() < self.radius and self.radius >= m.get_radius():
+            if self.circle_center_inside_self(m) and self.radius >= m.get_radius():
                 # formule pour ajouter à l'air de l'ennemie
                 self.set_radius((self.radius**2 + m.get_radius() ** 2) ** (1 / 2))
                 del Movable.movable_list[Movable.movable_list.index(m)]
