@@ -1,4 +1,4 @@
-from utilities import generate_random_color
+from utilities import generate_random_color, clamp
 import random
 from screen import M_WIDTH, M_HEIGHT, WIDTH, HEIGHT
 from pygame.math import Vector2 as V2
@@ -73,10 +73,14 @@ class Bot(Movable):
 
     def differential_pos(self):
         """renvoie la différence de position entre deux temps d'horloges"""
-        return (self.direction_auto() + 4 * self.get_dr()).normalize() * self.speed()
+        diff_position = 0.5 * self.direction_auto() + self.get_dr()
+        length_diff_position = clamp(diff_position.length(), 0, self.speed())
+        diff_position = diff_position.normalize() * length_diff_position
+        self.set_dr(diff_position)
+        return diff_position
 
 
-# Generate enemies
+# Generate bots
 def generate_bot():
     bot_list = [mov for mov in Movable.movable_list if isinstance(mov, Bot)]
     for _ in range(len(bot_list), MAX_BOT_NB):
