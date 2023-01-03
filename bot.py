@@ -14,9 +14,9 @@ class Bot(Movable):
         self,
         radius=20,
     ):
-        self.xy = V2(random.randint(0, M_WIDTH), random.randint(0, M_HEIGHT))
-        self.color = generate_random_color()
-        self.radius = radius
+        xy = V2(random.randint(0, M_WIDTH), random.randint(0, M_HEIGHT))
+        color = generate_random_color()
+        super().__init__(radius, xy, color)
         Movable.movable_list.append(self)
 
     # automatic movement
@@ -49,7 +49,10 @@ class Bot(Movable):
         for m in list:
             if not self.is_inside_of_screen(m.get_pos()):
                 continue
-            pos_relative = m.get_pos() - self.xy
+            if (m.get_pos() - self.xy).length() > 0:
+                pos_relative = m.get_pos() - self.xy
+            else:
+                continue
             distance_enemy = pos_relative.length()
             eval = eval_eatable(distance_enemy, m.get_radius(), self.radius)
 
@@ -63,12 +66,14 @@ class Bot(Movable):
                     * pos_relative.normalize()
                 )
 
-        direction = direction.normalize()
-        return direction
+        if direction.length() > 0:
+            return direction.normalize()
+        else:
+            return V2(0, 0)
 
     def differential_pos(self):
         """renvoie la différence de position entre deux temps d'horloges"""
-        return self.direction_auto() * self.speed()
+        return (self.direction_auto() + 4 * self.get_dr()).normalize() * self.speed()
 
 
 # Generate enemies
@@ -83,7 +88,7 @@ def eval_eatable(distance_eatable, r_eatable, radius):
     """donne un nombre correspondant à l'évaluation d'intéret à aller vers un objet mangeable plutôt qu'un autre"""
     if r_eatable > radius:
         return -1
-    return 50 / distance_eatable + r_eatable
+    return 50 / (distance_eatable + 1) + r_eatable
 
 
 def eval_dangerosity(distance_enemy, radius_enemy):

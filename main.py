@@ -45,8 +45,7 @@ def main():
 
         # Move and eat
         for movable in Movable.movable_list:
-            movable.eat_other_movables()
-            movable.eat_fruits()
+            movable.eat()
             movable.move()
 
         # draw movables and fruits on screen
