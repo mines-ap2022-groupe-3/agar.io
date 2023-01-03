@@ -48,7 +48,8 @@ class Utilities:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 done = True
-            # un type de pg.KEYDOWN signifie que l'on a appuyé une touche du clavier
+            # un type de pg.KEYDOWN signifie que l'on a appuyé une touche
+            #  du clavier
             elif event.type == pg.KEYDOWN:
                 # si la touche est "Q" ou "escape" on veut quitter le programme
                 if event.key == pg.K_q or event.key == pg.K_ESCAPE:
@@ -61,7 +62,7 @@ class Utilities:
                     return COLORS["yellow"]
 
     def generate_random_color(self):
-        return random.randrange(255), random.randrange(255), random.randrange(255)
+        return (random.randrange(255), random.randrange(255), random.randrange(255))
 
 
 class Drawing_functions:
