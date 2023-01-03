@@ -173,7 +173,7 @@ def eat_fruit(position, size) -> int:
             del LIST_FRUITS[LIST_FRUITS.index(f)]
     return size
 
-
+# test
 def main():
     clock = pg.time.Clock()
 
