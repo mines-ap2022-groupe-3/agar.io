@@ -5,8 +5,10 @@ import screen as sc
 import fruit
 import pygame as pg
 from pygame.math import Vector2 as V2
-<<<<<<< HEAD
 from collections import namedtuple
+from pygame.color import THECOLORS as COLORS
+import numpy.random as random
+from math import floor
 
 OVERMAP_BG = COLORS["white"]
 BOARD_COLOR = COLORS["grey"]
@@ -30,6 +32,7 @@ RAYON_FRUIT_MAX = 12
 
 BLOB_SIZE_IN = 20
 
+
 # Utilities
 def round_to(n, div):
     return floor(n / div) * div
@@ -39,7 +42,6 @@ def clamp(value, min_value, max_value):
     return min(max_value, max(value, min_value))
 
 
-<<<<<<< HEAD
 def couleur_debut():
     SCREEN2 = V2(400, 400)
     pg.display.set_mode(SCREEN2)
@@ -59,8 +61,6 @@ def couleur_debut():
                 return COLORS["yellow"]
 
 
-=======
->>>>>>> 47e9968c47218eb7d46e83f7c63d519dfde910f7
 def generate_random_color():
     return random.randrange(255), random.randrange(255), random.randrange(255)
 
@@ -172,8 +172,6 @@ def eat_fruit(position, size) -> int:
             size = (size**3 + f.radius**3) ** (1 / 3)
             del LIST_FRUITS[LIST_FRUITS.index(f)]
     return size
-=======
->>>>>>> 162e4119430253f5494b37aa51e2b356d7d43cf0
 
 
 def main():
