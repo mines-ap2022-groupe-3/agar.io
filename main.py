@@ -5,6 +5,10 @@ import screen as sc
 import fruit
 import pygame as pg
 from pygame.math import Vector2 as V2
+from collections import namedtuple
+from pygame.color import THECOLORS as COLORS
+import numpy.random as random
+from math import floor
 
 
 def main():
