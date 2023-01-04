@@ -27,9 +27,11 @@ class Player(Movable):
         )
 
         # implement a V2 newton force that pushes the blob towards the mouse
-        force = new_direction.normalize() * regression_coefficiant
-        # from a discretized newton 2nd law : ma = force => dr = c*f + previous_dr
-        diff_position = 0.5 * force + self.get_dr()
+        if new_direction != V2(0, 0):
+            force = new_direction.normalize() * regression_coefficiant
+        # from a discretized newton 2nd law : ma = force => dr = c*f + previous_dr * factor where factor corresponds to frixion forces, to slow down with the mouse
+        factor = (regression_coefficiant * (2 - regression_coefficiant)) ** (1 / 2)
+        diff_position = 0.7 * force + self.get_dr() * factor
 
         # limit the speed of the blob
         length_diff_position = clamp(diff_position.length(), 0, self.speed())
