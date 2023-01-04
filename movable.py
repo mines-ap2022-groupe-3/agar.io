@@ -1,6 +1,5 @@
 from fruit import Fruit
 from utilities import clamp
-from screen import M_WIDTH, M_HEIGHT
 from circle import Circle
 from pygame.math import Vector2 as V2
 
@@ -10,10 +9,11 @@ class Movable(Circle):
 
     movable_list = []
 
-    def __init__(self, radius, xy, color):
+    def __init__(self, radius, xy, color, v2_screen):
         super().__init__(radius, xy, color)
         self.split_list = [self]
         self.dr = V2(0, 0)
+        self.v2_screen = v2_screen
 
     def get_dr(self):
         return self.dr
@@ -35,11 +35,11 @@ class Movable(Circle):
                 self.set_radius((self.radius**2 + f.get_radius() ** 2) ** (1 / 2))
                 del Fruit.fruits_list[Fruit.fruits_list.index(f)]
 
-    def move(self):
+    def move(self, map):
         """return the new position after one clock time"""
         new_pos = self.xy + self.differential_pos()
-        new_pos.x = clamp(new_pos.x, 0, M_WIDTH)
-        new_pos.y = clamp(new_pos.y, 0, M_HEIGHT)
+        new_pos.x = clamp(new_pos.x, 0, map[0])
+        new_pos.y = clamp(new_pos.y, 0, map[1])
 
         self.set_pos(new_pos)
 

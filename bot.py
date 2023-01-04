@@ -1,6 +1,5 @@
 from utilities import generate_random_color, clamp
 import random
-from screen import M_WIDTH, M_HEIGHT, WIDTH, HEIGHT
 from pygame.math import Vector2 as V2
 from fruit import Fruit
 from movable import Movable
@@ -10,13 +9,10 @@ MAX_BOT_NB = 10
 
 
 class Bot(Movable):
-    def __init__(
-        self,
-        radius=20,
-    ):
-        xy = V2(random.randint(0, M_WIDTH), random.randint(0, M_HEIGHT))
+    def __init__(self, radius=20, v2_screen=V2(1200, 800), v2_map=V2(2400, 1600)):
+        xy = V2(random.randint(0, v2_map.x), random.randint(0, v2_map.y))
         color = generate_random_color()
-        super().__init__(radius, xy, color)
+        super().__init__(radius, xy, color, v2_screen)
         Movable.movable_list.append(self)
 
     # automatic movement
@@ -24,7 +20,8 @@ class Bot(Movable):
     def is_inside_of_screen(self, pos):
         """renvoie si un objet mangeable (fruit, joueur, ou ennemie) est affiché pour l'objet à position"""
         return (
-            abs((pos - self.xy).x) < WIDTH / 2 and abs((pos - self.xy).y) < HEIGHT / 2
+            abs((pos - self.xy).x) < self.v2_screen.x / 2
+            and abs((pos - self.xy).y) < self.v2_screen.y / 2
         )
 
     def direction_auto(self):
@@ -86,10 +83,10 @@ class Bot(Movable):
 
 
 # Generate bots
-def generate_bot():
+def generate_bot(v2_screen, v2_map):
     bot_list = [mov for mov in Movable.movable_list if isinstance(mov, Bot)]
     for _ in range(len(bot_list), MAX_BOT_NB):
-        Bot()
+        Bot(v2_screen=v2_screen, v2_map=v2_map)
 
 
 # fonctions d'évaluation
@@ -106,4 +103,4 @@ def eval_eatable(distance_eatable, r_eatable, radius):
 
 def eval_dangerosity(distance_enemy, radius_enemy):
     """évalue la dangerositée de rester prêt d'un enemy plus gros que nous"""
-    return 100 / (distance_enemy - radius_enemy)
+    return 10000 / (distance_enemy - radius_enemy)

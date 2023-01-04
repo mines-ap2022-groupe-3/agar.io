@@ -1,15 +1,11 @@
 #!/usr/bin/env python
 
-import screen as sc
 import pygame as pg
 from movable import Movable
 from player import Player
 from bot import generate_bot
 from fruit import Fruit, generate_fruit
-
-
-MAX_SPEED = 100
-SCREEN_CENTER = sc.SCREEN / 2
+from screen import MyScreen
 
 
 def main():
@@ -17,7 +13,6 @@ def main():
 
     # on initialise pygame et on crée une fenêtre de 800x800 pixels
     pg.init()
-    screen = pg.display.set_mode((sc.WIDTH, sc.HEIGHT))
 
     # On donne un titre à la fenetre
     pg.display.set_caption("agario")
@@ -35,25 +30,32 @@ def main():
         )
 
         # drawing map
-        sc.draw_background(screen)
-        sc.draw_map(screen, player.get_pos())
-        sc.draw_overmap(screen, player.get_pos())
+        my_screen = MyScreen()
+        my_screen.draw_background()
+        my_screen.draw_map(player.get_pos())
+        my_screen.draw_overmap(player.get_pos())
 
         # generate enemies and fruits
-        generate_bot()
-        generate_fruit()
+        generate_bot(my_screen.v2_screen, my_screen.v2_map)
+        generate_fruit(my_screen.v2_map)
 
         # Move and eat
         for movable in Movable.movable_list:
             movable.eat()
-            movable.move()
+            movable.move(my_screen.v2_map)
 
         # draw movables and fruits on screen
         for f in Fruit.fruits_list:
-            sc.draw_fruit(f, screen, player.get_pos())
+            my_screen.draw_fruit(f, player.get_pos())
         for m in Movable.movable_list:
-            sc.draw_movable(m, screen, player.get_pos())
+            my_screen.draw_movable(m, player.get_pos())
 
+        my_screen.display_box(
+            x=0,
+            y=0,
+            width=100,
+            message=f"Rayon : {player.get_radius(): .2f}",
+        )
         pg.display.update()
 
         # on itère sur tous les évênements qui ont eu lieu depuis le précédent appel

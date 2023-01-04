@@ -1,5 +1,4 @@
 from utilities import generate_random_color, clamp
-from screen import M_WIDTH, M_HEIGHT, SCREEN_CENTER
 from pygame.math import Vector2 as V2
 import pygame as pg
 from movable import Movable
@@ -11,17 +10,19 @@ class Player(Movable):
 
     def __init__(
         self,
-        xy=V2(M_WIDTH / 2, M_HEIGHT / 2),
         color=generate_random_color(),
         radius=20,
+        v2_map=V2(2400, 1600),
+        v2_screen=V2(1200, 800),
     ):
-        super().__init__(radius, xy, color)
+        xy = V2(v2_map.x / 2, v2_map.y / 2)
+        super().__init__(radius, xy, color, v2_screen)
         Movable.movable_list.append(self)
 
     def differential_pos(self):
         """renvoie la différence de position entre deux temps d'horloges"""
         # find the new direction from mouse
-        new_direction = V2(pg.mouse.get_pos()) - V2(SCREEN_CENTER)
+        new_direction = V2(pg.mouse.get_pos()) - self.v2_screen / 2
         regression_coefficiant = clamp(
             (new_direction / Player.max_speed).length(), 0, 1
         )

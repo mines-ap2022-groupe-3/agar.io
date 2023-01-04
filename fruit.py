@@ -1,7 +1,6 @@
 import random
 from pygame.math import Vector2 as V2
 from utilities import generate_random_color
-from screen import M_HEIGHT, M_WIDTH
 from circle import Circle
 
 
@@ -13,9 +12,9 @@ class Fruit(Circle):
     fruit_max_radius = 12
     fruits_list = []
 
-    def __init__(self):
+    def __init__(self, v2_map):
 
-        self.xy = V2(random.randint(0, M_WIDTH), random.randint(0, M_HEIGHT))
+        self.xy = V2(random.randint(0, v2_map[0]), random.randint(0, v2_map[1]))
         self.color = generate_random_color()
         self.radius = random.randint(Fruit.fruit_min_radius, Fruit.fruit_max_radius)
         Fruit.fruits_list.append(self)
@@ -30,10 +29,10 @@ class Fruit(Circle):
         return blob_size
 
 
-def generate_fruit():
+def generate_fruit(v2_map):
     """generate a fruit randomly on screen"""
     if len(Fruit.fruits_list) == 0 or (
         random.random() < Fruit.apparition_proba_fruit
         and len(Fruit.fruits_list) < Fruit.max_nb_fruit
     ):
-        Fruit()
+        Fruit(v2_map)
