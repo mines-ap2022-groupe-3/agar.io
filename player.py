@@ -20,18 +20,21 @@ class Player(Movable):
 
     def differential_pos(self):
         """renvoie la différence de position entre deux temps d'horloges"""
-        # On trouve la nouvelle direction/position
+        # find the new direction from mouse
         new_direction = V2(pg.mouse.get_pos()) - V2(SCREEN_CENTER)
         regression_coefficiant = clamp(
             (new_direction / Player.max_speed).length(), 0, 1
         )
 
+        # implement a V2 newton force that pushes the blob towards the mouse
         force = new_direction.normalize() * regression_coefficiant
-
+        # from a discretized newton 2nd law : ma = force => dr = c*f + previous_dr
         diff_position = 0.5 * force + self.get_dr()
 
+        # limit the speed of the blob
         length_diff_position = clamp(diff_position.length(), 0, self.speed())
         diff_position = diff_position.normalize() * length_diff_position
+        # set the new differencial position for the next call
         self.set_dr(diff_position)
 
         return diff_position
