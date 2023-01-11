@@ -25,12 +25,12 @@ BLOB_SIZE_IN = 20
 
 
 # Drawing functions
-def draw_background(screen):
+def draw_background(self , screen):
     full_screen = pg.Rect(0, 0, WIDTH, HEIGHT)
     pg.draw.rect(screen, BACKGROUND_COLOR, full_screen)
 
 
-def draw_map(screen, position, tile_size=TILE_SIZE):
+def draw_map(self, screen, position, tile_size=TILE_SIZE):
     display_rect = pg.Rect(
         position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
     )
@@ -55,12 +55,12 @@ def draw_map(screen, position, tile_size=TILE_SIZE):
         pg.draw.line(screen, BOARD_COLOR, (0, pos_j), (WIDTH, pos_j))
 
 
-def draw_blob(screen, size, color=None):
+def draw_blob(self, screen, size, color=None):
     x, y = SCREEN_CENTER
     pg.draw.circle(screen, color, (x, y), size)
 
 
-def draw_overmap(screen, position):
+def draw_overmap(self, screen, position):
     display_rect = pg.Rect(
         position.x - SCREEN_CENTER.x, position.y - SCREEN_CENTER.y, WIDTH, HEIGHT
     )
