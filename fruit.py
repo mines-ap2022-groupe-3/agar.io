@@ -1,66 +1,38 @@
 import random
-from math import floor
-
-import pygame as pg
-from pygame.color import THECOLORS as COLORS
 from pygame.math import Vector2 as V2
-from collections import namedtuple
 from utilities import generate_random_color
-import screen as sc
+from circle import Circle
 
 
-PROBA_APPARITION_FRUIT = 0.05
-NB_MAX_FRUIT = 40
-RAYON_FRUIT_MIN = 5
-RAYON_FRUIT_MAX = 12
+class Fruit(Circle):
 
+    apparition_proba_fruit = 0.20
+    max_nb_fruit = 50
+    fruit_min_radius = 5
+    fruit_max_radius = 12
+    fruits_list = []
 
-# génération fruit
-Fruit = namedtuple("Fruit", ["xy", "color", "radius"])
-LIST_FRUITS = []
+    def __init__(self, v2_map):
 
+        self.xy = V2(random.randint(0, v2_map[0]), random.randint(0, v2_map[1]))
+        self.color = generate_random_color()
+        self.radius = random.randint(Fruit.fruit_min_radius, Fruit.fruit_max_radius)
+        Fruit.fruits_list.append(self)
 
-def generate_random_fruit_position():
-    """génère une position aléatoire"""
-    x, y = random.randint(0, sc.M_WIDTH), random.randint(0, sc.M_HEIGHT)
-    return V2(x, y)
-
-
-def generate_random_fruit_radius():
-    """génère un rayon aléatoire entre RAYON_FRUIT_MIN et RAYON_FRUIT_MAX"""
-    r = random.randint(RAYON_FRUIT_MIN, RAYON_FRUIT_MAX)
-    return r
-
-
-def generate_fruit():
-    """génère un fruit aléatoirement sur le screen"""
-    if len(LIST_FRUITS) == 0 or (
-        random.random() < PROBA_APPARITION_FRUIT and len(LIST_FRUITS) < NB_MAX_FRUIT
-    ):
-        xy = generate_random_fruit_position()
-        color = generate_random_color()
-        radius = generate_random_fruit_radius()
-        LIST_FRUITS.append(Fruit(xy, color, radius))
-
-
-# affichage fruits
-
-
-def draw_fruits(screen, position):
-    """affiche les fruits"""
-    for f in LIST_FRUITS:
-        center = f.xy - position + sc.SCREEN_CENTER
-        pg.draw.circle(screen, f.color, center, f.radius)
-
-
-# Manger fruit
-
-
-def eat_fruit(position, size) -> int:
-    """si le fruit est assez proche, le mange. Renvoie la nouvelle taille après absorbation d'un ou plusieurs fruits"""
-    for f in LIST_FRUITS:
-        if (position - f.xy).length() < size:
+    def eat_fruit(self, movable) -> int:
+        """si le fruit est assez proche, le mange. Renvoie la nouvelle taille après absorbation d'un ou plusieurs fruits"""
+        blob_size = movable.get_radius()
+        if movable.circle_center_inside_self(self):
             # formule pour ajouter à l'air du blob l'air du fruit
-            size = (size**3 + f.radius**3) ** (1 / 3)
-            del LIST_FRUITS[LIST_FRUITS.index(f)]
-    return size
+            blob_size = (blob_size**2 + self.radius**2) ** (1 / 2)
+            del Fruit.fruits_list[Fruit.fruits_list.index(self)]
+        return blob_size
+
+
+def generate_fruit(v2_map):
+    """generate a fruit randomly on screen"""
+    if len(Fruit.fruits_list) == 0 or (
+        random.random() < Fruit.apparition_proba_fruit
+        and len(Fruit.fruits_list) < Fruit.max_nb_fruit
+    ):
+        Fruit(v2_map)

@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
-import utilities
-import screen as sc
-import fruit
 import pygame as pg
-from pygame.math import Vector2 as V2
+from movable import Movable
+from player import Player
+from bot import generate_bot
+from fruit import Fruit, generate_fruit
+from screen import MyScreen
 
 
 def main():
@@ -12,17 +13,11 @@ def main():
 
     # on initialise pygame et on crée une fenêtre de 800x800 pixels
     pg.init()
-    screen = pg.display.set_mode((sc.WIDTH, sc.HEIGHT))
 
     # On donne un titre à la fenetre
     pg.display.set_caption("agario")
 
-    blob_size = sc.BLOB_SIZE_IN
-    color = utilities.generate_random_color()
-    speed = 4
-    position = V2(sc.MAP) / 2
-    SCREEN_CENTER = sc.SCREEN / 2
-    MAX_SPEED = 100
+    player = Player()
 
     # La boucle du jeu
     done = False
@@ -30,30 +25,37 @@ def main():
         # FPS
         clock.tick(60)
 
-        # On trouve la nouvelle direction/position
-        new_direction = V2(pg.mouse.get_pos()) - V2(SCREEN_CENTER)
-        if new_direction.magnitude() >= MAX_SPEED:
-            new_direction = new_direction.normalize()
-        else:
-            new_direction = new_direction / MAX_SPEED
+        pg.display.set_caption(
+            f"agario - {player.get_pos().x=:5.0f} - {player.get_pos().y=:5.0f}"
+        )
 
-        position += new_direction * speed
+        # drawing map
+        my_screen = MyScreen()
+        my_screen.draw_background()
+        my_screen.draw_map(player.get_pos())
+        my_screen.draw_overmap(player.get_pos())
 
-        pg.display.set_caption(f"agario - {position.x=:5.0f} - {position.y=:5.0f}")
+        # generate enemies and fruits
+        generate_bot(my_screen.v2_screen, my_screen.v2_map)
+        generate_fruit(my_screen.v2_map)
 
-        # On s'assure que la position ne sorte pas de la map
-        position.x = utilities.clamp(position.x, 0, sc.M_WIDTH)
-        position.y = utilities.clamp(position.y, 0, sc.M_HEIGHT)
+        # Move and eat
+        for movable in Movable.movable_list:
+            movable.eat()
+            movable.move(my_screen.v2_map)
 
-        sc.draw_background(screen)
-        sc.draw_map(screen, position)
-        sc.draw_overmap(screen, position)
+        # draw movables and fruits on screen
+        for f in Fruit.fruits_list:
+            my_screen.draw_fruit(f, player.get_pos())
+        for m in Movable.movable_list:
+            my_screen.draw_movable(m, player.get_pos())
 
-        fruit.generate_fruit()
-        blob_size = fruit.eat_fruit(position, size=blob_size)
-        fruit.draw_fruits(screen, position)
-        sc.draw_blob(screen, size=blob_size, color=color)
-
+        my_screen.display_box(
+            x=0,
+            y=0,
+            width=100,
+            message=f"Rayon : {player.get_radius(): .2f}",
+        )
         pg.display.update()
 
         # on itère sur tous les évênements qui ont eu lieu depuis le précédent appel
