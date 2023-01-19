@@ -6,7 +6,7 @@ from circle import Circle
 
 class Fruit(Circle):
 
-    apparition_proba_fruit = 0.10
+    apparition_proba_fruit = 0.20
     max_nb_fruit = 50
     fruit_min_radius = 5
     fruit_max_radius = 12

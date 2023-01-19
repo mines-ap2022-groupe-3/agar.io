@@ -103,4 +103,4 @@ def eval_eatable(distance_eatable, r_eatable, radius):
 
 def eval_dangerosity(distance_enemy, radius_enemy):
     """évalue la dangerositée de rester prêt d'un enemy plus gros que nous"""
-    return 10000 / (distance_enemy - radius_enemy)
+    return 10000 / (distance_enemy - radius_enemy) + 100 * radius_enemy

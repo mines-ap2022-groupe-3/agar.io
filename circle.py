@@ -27,4 +27,6 @@ class Circle:
     def circle_inside_self(self, circle):
         """Return if circle is inside of self"""
 
-        return (self.xy - circle.get_pos()).length() < self.radius - circle.get_radius()
+        return (
+            self.xy - circle.get_pos()
+        ).length() < self.radius - circle.get_radius() / 2
